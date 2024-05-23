@@ -1,0 +1,24 @@
+[workspace]
+members = ["gpt", "gpt_core"]
+resolver = "2"
+
+[workspace.package]
+version = "0.0.1"
+authors = ["Louis <836250617@qq.com>"]
+description = "Call chatGPT with CLI."
+license = "MIT"
+edition = "2021"
+repository = "https://github.com/kingwingfly/gpt_cli"
+documentation = ""
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+snafu = { version = "0.8.2" }
+
+[profile.release]
+lto = "fat"
+opt-level = 3
+codegen-units = 1
+strip = "debuginfo"
+panic = "abort"

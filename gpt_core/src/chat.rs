@@ -100,17 +100,14 @@ impl Chat {
             .bytes_stream();
         while let Some(item) = stream.next().await {
             let item = item?;
-            let s = std::str::from_utf8(&item).expect("Invalid UTF-8 sequence");
-            for p in s.split("\n\n") {
-                if let Some(p) = p.strip_prefix("data: ") {
-                    // Check if the stream is done...
-                    if p == "[DONE]" {
+            let chunk = std::str::from_utf8(&item).expect("Invalid UTF-8 sequence");
+            for chunk in chunk.split("\n\n") {
+                if let Some(chunk) = chunk.strip_prefix("data: ") {
+                    if chunk == "[DONE]" {
                         break;
                     }
-                    // Parse the json data...
-                    let d = serde_json::from_str::<Chunk>(p)?;
-                    if let Some(c) = d.content() {
-                        output.write_all(c.as_bytes())?;
+                    if let Some(chunk) = serde_json::from_str::<Chunk>(chunk)?.content() {
+                        output.write_all(chunk.as_bytes())?;
                         output.flush()?;
                     }
                 }

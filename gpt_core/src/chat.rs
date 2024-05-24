@@ -99,12 +99,9 @@ impl Chat {
             .send()
             .await?
             .bytes_stream();
-        while let Some(Ok(chunk)) = stream.next().await {
-            let chunk = chunk
-                .strip_prefix(b"data: ")
-                .unwrap()
-                .strip_suffix(b"\n\n")
-                .unwrap();
+        while let Some(chunk) = stream.next().await {
+            let chunk = chunk?;
+            let chunk = chunk.strip_prefix(b"data: ").unwrap();
             if let Ok(chunk) = serde_json::from_slice::<Chunk>(chunk) {
                 if let Some(content) = chunk.content() {
                     output.write_all(content.as_bytes())?;
@@ -140,7 +137,7 @@ mod tests {
     }
 
     #[test]
-    fn test_model_serde() {
+    fn test_serde() {
         let model = Chat::new();
         let json = serde_json::to_string(&model).unwrap();
         assert_eq!(json, r#"{"stream":true,"model":"gpt-4o","messages":[]}"#);

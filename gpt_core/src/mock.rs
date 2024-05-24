@@ -21,9 +21,11 @@ impl Mock {
         let mut last_received = std::time::Instant::now();
         loop {
             if let Ok((mut stream, _)) = listener.accept() {
-                let mut buf = vec![];
+                let mut buf = [0; 1024];
                 if let Ok(len) = stream.read(&mut buf) {
-                    let req: Chat = serde_json::from_slice(&buf[..len])?;
+                    let buf = String::from_utf8_lossy(&buf[..len]);
+                    let buf = buf.split("\r\n").last().unwrap();
+                    let req: Chat = serde_json::from_str(buf)?;
                     if !req.stream() {
                         unimplemented!("Non-streaming mode is not implemented.")
                     }

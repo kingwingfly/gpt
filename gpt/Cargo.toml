@@ -5,3 +5,19 @@ edition = "2021"
 
 [dependencies]
 gpt_core = { path = "../gpt_core" }
+gpt_ui = { path = "../gpt_ui" }
+
+[[bin]]
+name = "gpt_cli"
+path = "src/main.rs"
+required-features = ["cli"]
+
+[[bin]]
+name = "gpt_tui"
+path = "src/main.rs"
+required-features = ["tui"]
+
+[features]
+default = []
+tui = ["gpt_ui/tui"]
+cli = ["gpt_ui/cli"]

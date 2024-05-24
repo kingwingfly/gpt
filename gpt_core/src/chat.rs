@@ -88,8 +88,7 @@ impl Chat {
     }
 
     pub async fn ask(&self, config: Config, output: &mut impl io::Write) -> Result<()> {
-        let client = Self::client();
-        let mut stream = client
+        let mut stream = Self::client()
             .post(config.endpoint().clone())
             .header(
                 header::AUTHORIZATION,
@@ -99,13 +98,20 @@ impl Chat {
             .send()
             .await?
             .bytes_stream();
-        while let Some(chunk) = stream.next().await {
-            let chunk = chunk?;
-            let chunk = chunk.strip_prefix(b"data: ").unwrap();
-            if let Ok(chunk) = serde_json::from_slice::<Chunk>(chunk) {
-                if let Some(content) = chunk.content() {
-                    output.write_all(content.as_bytes())?;
-                    output.flush()?;
+        while let Some(Ok(item)) = stream.next().await {
+            let s = std::str::from_utf8(&item).expect("Invalid UTF-8 sequence");
+            for p in s.split("\n\n") {
+                if let Some(p) = p.strip_prefix("data: ") {
+                    // Check if the stream is done...
+                    if p == "[DONE]" {
+                        break;
+                    }
+                    // Parse the json data...
+                    let d = serde_json::from_str::<Chunk>(p)?;
+                    if let Some(c) = d.content() {
+                        output.write_all(c.as_bytes())?;
+                        output.flush()?;
+                    }
                 }
             }
         }
@@ -148,9 +154,8 @@ mod tests {
     #[cfg(feature = "mock")]
     #[tokio::test]
     async fn mock_chat_ask() {
-        use std::time::Duration;
-
         use crate::mock::Mock;
+        use std::time::Duration;
 
         let chat = Chat::new();
         let config = Config::new("http://127.0.0.1:3000", "api-key");

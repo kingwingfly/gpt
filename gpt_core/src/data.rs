@@ -40,6 +40,10 @@ impl Chunk {
     pub fn content(&self) -> Option<String> {
         self.choices.first().and_then(|c| c.delta.content.clone())
     }
+
+    pub fn finish_reason(&self) -> Option<String> {
+        self.choices.first().and_then(|c| c.finish_reason.clone())
+    }
 }
 
 #[cfg(test)]

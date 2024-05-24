@@ -1,74 +1,56 @@
 use std::{
-    io::{Read, Write},
-    net::{SocketAddr, TcpListener},
+    io::Write,
+    net::{SocketAddr, TcpListener, TcpStream},
     time::Duration,
 };
 
-use crate::{chat::Chat, data::Chunk, error::Result};
+use crate::{data::Chunk, error::Result};
 
 pub(crate) struct Mock {}
 
 impl Mock {
     pub(crate) fn new() -> Self {
-        Mock {}
+        Self {}
     }
 
-    pub(crate) fn run(&self, port: u16, close_after: std::time::Duration) -> Result<()> {
+    pub(crate) fn run(&self, port: u16, close_idle: Duration) -> Result<()> {
         let addr = SocketAddr::from(([127, 0, 0, 1], port));
         let listener = TcpListener::bind(addr)?;
         listener.set_nonblocking(true)?;
-        println!("Listening on: {}", addr);
-        let mut last_received = std::time::Instant::now();
+        let mut instant = std::time::Instant::now();
         loop {
-            if let Ok((mut stream, _)) = listener.accept() {
-                let mut buf = [0; 1024];
-                if let Ok(len) = stream.read(&mut buf) {
-                    let buf = String::from_utf8_lossy(&buf[..len]);
-                    let buf = buf.split("\r\n").last().unwrap();
-                    let req: Chat = serde_json::from_str(buf)?;
-                    if !req.stream() {
-                        unimplemented!("Non-streaming mode is not implemented.")
-                    }
-                    let resp = "This is response from mock server.".split_whitespace();
-                    for word in resp {
-                        let chunk = Chunk::new(word);
-                        let chunk = gen_resp(&serde_json::to_string(&chunk)?);
-                        stream.write_all(chunk.as_bytes())?;
-                        std::thread::sleep(Duration::from_millis(100));
-                    }
-                    last_received = std::time::Instant::now();
-                }
-            } else {
-                // Check if the timeout has been reached
-                if last_received.elapsed() >= close_after {
-                    println!("No data received. Quitting...");
-                    break;
-                }
-                // Sleep for a short duration to prevent busy-waiting
-                std::thread::sleep(Duration::from_millis(100));
+            if let Ok((stream, _)) = listener.accept() {
+                handle_stream(stream);
+                instant = std::time::Instant::now();
+            } else if instant.elapsed() > close_idle {
+                println!("Mock server closed.");
+                break;
             }
         }
-
         Ok(())
     }
 }
 
-fn gen_resp(msg: &str) -> String {
-    let msg = format!("data: {}\n\n", msg);
-    format!(
-        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
-        msg.len(),
-        msg
-    )
+fn handle_stream(mut stream: TcpStream) {
+    stream.write_all(b"HTTP/1.1 200 OK\r\n").unwrap();
+    stream
+        .write_all(b"Transfer-Encoding: chunked\r\n\r\n")
+        .unwrap();
+    for world in ["Response ", "from ", "mock ", "server."] {
+        let chunk = Chunk::new(world);
+        let chunk = gen_resp(serde_json::to_string(&chunk).unwrap());
+        stream.write_all(chunk.as_bytes()).unwrap();
+        stream.flush().unwrap();
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    let chunk = gen_resp("[DONE]".to_string());
+    stream.write_all(chunk.as_bytes()).unwrap();
+
+    stream.write_all(b"0\r\n\r\n").unwrap();
+    stream.flush().unwrap();
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn mock_test() {
-        let mock = Mock::new();
-        mock.run(3000, Duration::from_secs(60)).unwrap();
-    }
+fn gen_resp(data: String) -> String {
+    let data = format!("data: {}\n\n", data);
+    format!("{:x}\r\n{}\r\n", data.len(), data)
 }

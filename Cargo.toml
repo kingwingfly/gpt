@@ -1,5 +1,5 @@
 [workspace]
-members = ["gpt", "gpt_core"]
+members = ["gpt", "gpt_core", "gpt_ui"]
 resolver = "2"
 
 [workspace.package]

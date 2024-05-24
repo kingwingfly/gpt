@@ -161,7 +161,7 @@ mod tests {
             let mock = Mock::new();
             mock.run(3000, Duration::from_secs(1)).unwrap();
         });
-        let mut output = std::io::stdout();
+        let mut output = vec![];
         chat.ask(config, &mut output).await.unwrap();
         jh.join().unwrap();
     }

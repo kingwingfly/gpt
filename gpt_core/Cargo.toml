@@ -11,8 +11,11 @@ serde_json = { workspace = true }
 snafu = { workspace = true }
 # tool
 uuid = { version = "1.8.0", features = ["v7", "serde"] }
+dirs = "2.0.0"
+keyring = { version = "2.3.3" }
 # net
 reqwest = { version = "0.12.4", features = ["json", "stream"] }
+url = { version = "2.5.0", features = ["serde"] }
 # async
 tokio = { version = "1.0", features = ["macros"] }
 futures-util = "0.3.30"

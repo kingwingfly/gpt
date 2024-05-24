@@ -10,4 +10,6 @@ pub enum Error {
     Json { source: serde_json::Error },
     #[snafu(display("Reqwest error: {}", source), context(false))]
     Reqwest { source: reqwest::Error },
+    #[snafu(display("Keyring error: {}", source), context(false))]
+    Keyring { source: keyring::error::Error },
 }

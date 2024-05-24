@@ -1,8 +1,9 @@
-mod chat;
-mod config;
-mod data;
-mod error;
+pub mod chat;
+pub mod config;
+pub mod ctx;
+pub mod data;
+pub mod error;
 #[cfg(feature = "mock")]
-mod mock;
-mod model;
-mod msg;
+pub mod mock;
+pub mod model;
+pub mod msg;

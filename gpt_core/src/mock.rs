@@ -6,14 +6,15 @@ use std::{
 
 use crate::{data::Chunk, error::Result};
 
-pub(crate) struct Mock {}
+#[derive(Default)]
+pub struct Mock {}
 
 impl Mock {
-    pub(crate) fn new() -> Self {
-        Self {}
+    pub fn new() -> Self {
+        Self::default()
     }
 
-    pub(crate) fn run(&self, port: u16, close_idle: Duration) -> Result<()> {
+    pub fn run(&self, port: u16, close_idle: Duration) -> Result<()> {
         let addr = SocketAddr::from(([127, 0, 0, 1], port));
         let listener = TcpListener::bind(addr)?;
         listener.set_nonblocking(true)?;
@@ -23,7 +24,6 @@ impl Mock {
                 handle_stream(stream);
                 instant = std::time::Instant::now();
             } else if instant.elapsed() > close_idle {
-                println!("Mock server closed.");
                 break;
             }
         }
@@ -48,4 +48,33 @@ fn handle_stream(mut stream: TcpStream) {
 
 fn gen_resp(data: String) -> String {
     format!("data: {}\n\n", data)
+}
+
+#[derive(Debug)]
+pub(crate) struct Entry {
+    password: std::sync::Mutex<std::cell::RefCell<Option<String>>>,
+}
+
+#[cfg(feature = "mock")]
+impl Entry {
+    pub(crate) fn new(_: &str, _: &str) -> keyring::Result<Self> {
+        Ok(Self {
+            password: std::sync::Mutex::new(std::cell::RefCell::new(None)),
+        })
+    }
+
+    pub(crate) fn set_password(&self, pwd: &str) -> keyring::Result<()> {
+        *self.password.lock().unwrap().borrow_mut() = Some(pwd.to_string());
+        Ok(())
+    }
+
+    pub(crate) fn get_password(&self) -> keyring::Result<String> {
+        Ok(self
+            .password
+            .lock()
+            .unwrap()
+            .borrow()
+            .clone()
+            .unwrap_or("".to_string()))
+    }
 }

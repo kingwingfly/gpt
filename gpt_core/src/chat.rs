@@ -136,7 +136,6 @@ mod tests {
         let chat = Chat::read_from_path(&path).unwrap();
         assert_eq!(chat.model, ModelVersion::GPT4o);
         assert_eq!(chat.messages.len(), 2);
-        println!("{}", serde_json::to_string_pretty(&chat).unwrap());
         std::fs::remove_file(path).unwrap();
     }
 

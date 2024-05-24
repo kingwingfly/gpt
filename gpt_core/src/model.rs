@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize, Clone, Copy)]
 #[cfg_attr(test, derive(PartialEq))]
 pub(crate) enum ModelVersion {
     #[default]

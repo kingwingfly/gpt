@@ -6,7 +6,8 @@ pub type Result<T> = std::result::Result<T, Error>;
 pub enum Error {
     #[snafu(display("IO error: {}", source), context(false))]
     Io { source: std::io::Error },
-
     #[snafu(display("JSON error: {}", source), context(false))]
     Json { source: serde_json::Error },
+    #[snafu(display("Reqwest error: {}", source), context(false))]
+    Reqwest { source: reqwest::Error },
 }

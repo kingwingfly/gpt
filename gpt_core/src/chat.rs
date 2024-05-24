@@ -98,7 +98,8 @@ impl Chat {
             .send()
             .await?
             .bytes_stream();
-        while let Some(Ok(item)) = stream.next().await {
+        while let Some(item) = stream.next().await {
+            let item = item?;
             let s = std::str::from_utf8(&item).expect("Invalid UTF-8 sequence");
             for p in s.split("\n\n") {
                 if let Some(p) = p.strip_prefix("data: ") {

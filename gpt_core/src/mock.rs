@@ -32,10 +32,7 @@ impl Mock {
 }
 
 fn handle_stream(mut stream: TcpStream) {
-    stream.write_all(b"HTTP/1.1 200 OK\r\n").unwrap();
-    stream
-        .write_all(b"Transfer-Encoding: chunked\r\n\r\n")
-        .unwrap();
+    stream.write_all(b"HTTP/1.1 200 OK\r\n\r\n").unwrap();
     for world in ["Response ", "from ", "mock ", "server."] {
         let chunk = Chunk::new(world);
         let chunk = gen_resp(serde_json::to_string(&chunk).unwrap());
@@ -45,12 +42,10 @@ fn handle_stream(mut stream: TcpStream) {
     }
     let chunk = gen_resp("[DONE]".to_string());
     stream.write_all(chunk.as_bytes()).unwrap();
-
-    stream.write_all(b"0\r\n\r\n").unwrap();
     stream.flush().unwrap();
+    stream.shutdown(std::net::Shutdown::Both).unwrap();
 }
 
 fn gen_resp(data: String) -> String {
-    let data = format!("data: {}\n\n", data);
-    format!("{:x}\r\n{}\r\n", data.len(), data)
+    format!("data: {}\n\n", data)
 }

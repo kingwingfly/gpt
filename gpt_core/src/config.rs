@@ -3,6 +3,7 @@ use keyring::Entry;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 use std::fs::OpenOptions;
+use std::path::PathBuf;
 use url::Url;
 
 /// The name of the application for config save.
@@ -24,6 +25,15 @@ impl Display for Config {
             "Endpoint:\t {}\nAPI Key:\t {}",
             self.endpoint, self.api_key
         )
+    }
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            endpoint: Url::parse("https://api.openai.com/v1/chat/completions").unwrap(),
+            api_key: String::new(),
+        }
     }
 }
 
@@ -49,13 +59,8 @@ impl Config {
     }
 
     pub fn read() -> Result<Self> {
-        let config = match Self::read_masked() {
-            Ok(mut config) => {
-                config.api_key = keyring_entry().get_password()?;
-                config
-            }
-            Err(_) => Config::new("https://api.openai.com/v1/chat/completions", "unknown"),
-        };
+        let mut config = Self::read_masked()?;
+        config.api_key = keyring_entry().get_password()?;
         Ok(config)
     }
 
@@ -81,7 +86,10 @@ impl Config {
     }
 }
 
-fn config_file(truncate: bool) -> std::io::Result<std::fs::File> {
+pub fn config_file(truncate: bool) -> std::io::Result<std::fs::File> {
+    #[cfg(feature = "mock")]
+    let config_dir = PathBuf::from(env!("OUT_DIR")).join(NAME).join("config");
+    #[cfg(not(feature = "mock"))]
     let config_dir = dirs::config_dir()
         .expect("Cannot find config dir.")
         .join(NAME);
@@ -93,6 +101,15 @@ fn config_file(truncate: bool) -> std::io::Result<std::fs::File> {
         .read(true)
         .truncate(truncate)
         .open(config_path)
+}
+
+pub fn data_dir() -> std::io::Result<PathBuf> {
+    #[cfg(feature = "mock")]
+    let data_dir = PathBuf::from(env!("OUT_DIR")).join(NAME).join("data");
+    #[cfg(not(feature = "mock"))]
+    let data_dir = dirs::data_dir().expect("Cannot find data dir.").join(NAME);
+    std::fs::create_dir_all(&data_dir)?;
+    Ok(data_dir)
 }
 
 fn keyring_entry() -> &'static Entry {

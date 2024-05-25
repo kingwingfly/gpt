@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 
 pub type Messages = Vec<Message>;
 
@@ -6,6 +7,12 @@ pub type Messages = Vec<Message>;
 pub struct Message {
     role: Role,
     content: String,
+}
+
+impl Display for Message {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}: {}", self.role, self.content)
+    }
 }
 
 impl Message {

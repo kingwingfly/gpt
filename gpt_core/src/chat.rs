@@ -8,20 +8,31 @@ use crate::{
 use futures_util::StreamExt;
 use reqwest::{header, Client};
 use serde::{Deserialize, Serialize};
-use std::{io, path::Path};
-use std::{path::PathBuf, sync::OnceLock};
+use std::{fmt::Display, io, path::Path, path::PathBuf, sync::OnceLock};
 use uuid::Uuid;
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct Chat {
-    #[serde(skip)]
     id: Uuid,
     #[serde(skip)]
     topic: String,
     stream: bool,
     model: ModelVersion,
     messages: Messages,
+}
+
+impl Display for Chat {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "Chat ID: {}", self.id)?;
+        writeln!(f, "Topic: {}", self.topic)?;
+        writeln!(f, "Model: {:?}", self.model)?;
+        writeln!(f, "Dialog:\n")?;
+        for msg in &self.messages {
+            writeln!(f, "{}", msg)?;
+        }
+        Ok(())
+    }
 }
 
 impl Chat {

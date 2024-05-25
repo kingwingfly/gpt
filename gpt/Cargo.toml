@@ -7,7 +7,7 @@ edition = "2021"
 gpt_core = { path = "../gpt_core" }
 gpt_ui = { path = "../gpt_ui" }
 # async
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 [[bin]]
 name = "gpt_cli"

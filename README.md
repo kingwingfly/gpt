@@ -100,7 +100,7 @@ Change these: `repo_name`, `project_title`, `project_description`, `documentatio
    ```
 2. Compilation
    ```sh
-   cargo build
+   cargo build --bin gpt_cli --features cli --release
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

@@ -4,6 +4,7 @@ use crate::{
     error::Result,
     model::ModelVersion,
     msg::{Message, Messages, Role},
+    req::Req,
 };
 use futures_util::StreamExt;
 use reqwest::{header, Client};
@@ -16,7 +17,6 @@ use uuid::Uuid;
 #[non_exhaustive]
 pub struct Chat {
     id: Uuid,
-    #[serde(skip)]
     topic: String,
     stream: bool,
     model: ModelVersion,
@@ -56,7 +56,7 @@ impl Chat {
         let path = path
             .as_ref()
             .to_path_buf()
-            .join(format!("{}.json", self.id));
+            .join(format!("{}-{}.json", self.topic(), self.id));
         let file = std::fs::File::create(&path)?;
         serde_json::to_writer(file, self)?;
         Ok(path)
@@ -107,7 +107,7 @@ impl Chat {
                 header::AUTHORIZATION,
                 format!("Bearer {}", config.api_key()),
             )
-            .json(&self)
+            .json(&self.req())
             .send()
             .await?
             .bytes_stream();
@@ -129,6 +129,10 @@ impl Chat {
         }
         output.write_all(b"\n")?;
         Ok(content)
+    }
+
+    pub fn req(&self) -> Req {
+        Req::new(self)
     }
 }
 
@@ -163,6 +167,7 @@ mod tests {
 
     #[cfg(feature = "mock")]
     #[tokio::test]
+    #[ignore(reason = "GitHub Actions does not support mock server")]
     async fn mock_chat_ask() {
         use crate::mock::Mock;
         use std::time::Duration;

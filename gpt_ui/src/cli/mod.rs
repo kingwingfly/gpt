@@ -7,7 +7,7 @@ use error::Result;
 
 /// The CLI application for interacting with the OpenAI chatGPT API
 #[derive(Debug, Parser)]
-#[clap(version, about)]
+#[clap(author, version = crate::VERSION, about)]
 pub struct App {
     #[command(subcommand)]
     subcmd: Option<Commands>,

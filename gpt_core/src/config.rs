@@ -1,4 +1,5 @@
 use crate::error::Result;
+use keyring::Entry;
 use serde::{Deserialize, Serialize};
 use std::fs::OpenOptions;
 use url::Url;
@@ -15,7 +16,7 @@ pub struct Config {
 }
 
 /// When enable feature `mock`, it uses a mock keyring entry.
-/// When not, it uses keyring entry.
+/// When not, it uses os' keyring entry.
 /// This avoids entering password during tests.
 /// If no password manager keyring is able to use, program will panic with error hint.
 impl Config {
@@ -48,18 +49,18 @@ impl Config {
     }
 }
 
-fn config_file(truncate: bool) -> Result<std::fs::File> {
+fn config_file(truncate: bool) -> std::io::Result<std::fs::File> {
     let config_dir = dirs::config_dir()
         .expect("Cannot find config dir.")
         .join(NAME);
     std::fs::create_dir_all(&config_dir)?;
     let config_path = config_dir.join("config.json");
-    Ok(OpenOptions::new()
+    OpenOptions::new()
         .create(true)
-        .truncate(truncate)
         .write(true)
         .read(true)
-        .open(config_path)?)
+        .truncate(truncate)
+        .open(config_path)
 }
 
 fn serialize<S>(api_key: &str, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -70,8 +71,6 @@ where
     entry.set_password(api_key).expect(KEY_ERROR_HINT);
     serializer.serialize_str("stored with keyring")
 }
-
-use keyring::Entry;
 
 fn keyring_entry() -> &'static Entry {
     use std::sync::OnceLock;

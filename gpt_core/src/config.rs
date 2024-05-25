@@ -14,10 +14,10 @@ pub struct Config {
     api_key: String,
 }
 
-/// When #[cfg(test)], it uses a mock keyring entry.
-/// When #[cfg(not(test))], it uses keyring entry.
-/// This avoid entering password during tests.
-/// If no password manager keyring able to use, program will panic with error hint.
+/// When enable feature `mock`, it uses a mock keyring entry.
+/// When not, it uses keyring entry.
+/// This avoids entering password during tests.
+/// If no password manager keyring is able to use, program will panic with error hint.
 impl Config {
     pub fn new(endpoint: impl AsRef<str>, api_key: impl AsRef<str>) -> Self {
         Self {
@@ -71,13 +71,12 @@ where
     serializer.serialize_str("stored with keyring")
 }
 
-#[cfg(feature = "mock")]
-use crate::mock::Entry;
-#[cfg(not(feature = "mock"))]
 use keyring::Entry;
 
 fn keyring_entry() -> &'static Entry {
     use std::sync::OnceLock;
+    #[cfg(feature = "mock")]
+    keyring::set_default_credential_builder(keyring::mock::default_credential_builder());
     let user = std::env::var("USER").unwrap_or("unknown".to_string());
     static ENTRY: OnceLock<Entry> = OnceLock::new();
     ENTRY.get_or_init(|| Entry::new(NAME, &user).expect(KEYRING_ERROR_HINT))

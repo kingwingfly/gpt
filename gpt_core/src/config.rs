@@ -1,19 +1,30 @@
 use crate::error::Result;
 use keyring::Entry;
 use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 use std::fs::OpenOptions;
 use url::Url;
 
 /// The name of the application for config save.
 const NAME: &str = "chatGPT";
 const KEYRING_ERROR_HINT: &str = "Keyring Error. Maybe no password manager is installed.";
-const KEY_ERROR_HINT: &str = "Invalid key.";
+const API_KEY_ERROR_HINT: &str = "Failed store API Key. Maybe no password manager is installed.";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     endpoint: Url,
-    #[serde(serialize_with = "serialize")]
+    #[serde(skip, default = "masked")]
     api_key: String,
+}
+
+impl Display for Config {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Endpoint:\t {}\nAPI Key:\t {}",
+            self.endpoint, self.api_key
+        )
+    }
 }
 
 /// When enable feature `mock`, it uses a mock keyring entry.
@@ -31,11 +42,14 @@ impl Config {
     pub fn save(&self) -> Result<()> {
         let file = config_file(true)?;
         serde_json::to_writer(file, self)?;
+        keyring_entry()
+            .set_password(&self.api_key)
+            .expect(API_KEY_ERROR_HINT);
         Ok(())
     }
 
     pub fn read() -> Result<Self> {
-        let config = match Self::read_mask_api_key() {
+        let config = match Self::read_masked() {
             Ok(mut config) => {
                 config.api_key = keyring_entry()
                     .get_password()
@@ -47,7 +61,8 @@ impl Config {
         Ok(config)
     }
 
-    pub fn read_mask_api_key() -> Result<Self> {
+    /// Read the config file without reading the api_key.
+    pub fn read_masked() -> Result<Self> {
         Ok(serde_json::from_reader(config_file(false)?)?)
     }
 
@@ -82,15 +97,6 @@ fn config_file(truncate: bool) -> std::io::Result<std::fs::File> {
         .open(config_path)
 }
 
-fn serialize<S>(api_key: &str, serializer: S) -> core::result::Result<S::Ok, S::Error>
-where
-    S: serde::Serializer,
-{
-    let entry = keyring_entry();
-    entry.set_password(api_key).expect(KEY_ERROR_HINT);
-    serializer.serialize_str("stored with keyring")
-}
-
 fn keyring_entry() -> &'static Entry {
     use std::sync::OnceLock;
     #[cfg(feature = "mock")]
@@ -98,6 +104,10 @@ fn keyring_entry() -> &'static Entry {
     let user = std::env::var("USER").unwrap_or("unknown".to_string());
     static ENTRY: OnceLock<Entry> = OnceLock::new();
     ENTRY.get_or_init(|| Entry::new(NAME, &user).expect(KEYRING_ERROR_HINT))
+}
+
+fn masked() -> String {
+    "********".to_string()
 }
 
 #[cfg(test)]

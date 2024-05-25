@@ -1,3 +1,5 @@
+#![cfg_attr(all(doc, CHANNEL_NIGHTLY), feature(doc_auto_cfg))]
+
 pub mod chat;
 pub mod config;
 pub mod ctx;

@@ -44,7 +44,10 @@ jobs:
         with:
           # (required) Comma-separated list of binary names (non-extension portion of filename) to build and upload.
           # Note that glob pattern is not supported yet.
-          bin: gpt
+          bin: gpt_cli
+          # (optional) Features to enable.
+          # Comma-separated list of cargo build features to enable
+          features: cli
           # (optional) Target triple, default is host triple.
           # This is optional but it is recommended that this always be set to
           # clarify which target you are building for if macOS is included in
@@ -69,4 +72,14 @@ jobs:
           # [possible values: all, unix, windows, none]
           zip: windows
           # (required) GitHub token for uploading assets to GitHub Releases.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: gpt_tui
+          features: tui
+          target: ${{ matrix.target }}
+          archive: $bin-$tag-$target
+          tar: unix
+          zip: windows
           token: ${{ secrets.GITHUB_TOKEN }}

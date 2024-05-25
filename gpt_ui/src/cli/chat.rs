@@ -70,6 +70,7 @@ async fn history() -> Result<()> {
         let chosen = Select::with_theme(&ColorfulTheme::default())
             .with_prompt("Choose")
             .item("New")
+            .item("Delete all")
             .items(&paths)
             .max_length(10)
             .interact()?;
@@ -78,8 +79,21 @@ async fn history() -> Result<()> {
                 new_chat(Chat::new()).await?;
                 break;
             }
+            1 => {
+                if Confirm::new()
+                    .with_prompt("Are you sure to delete all?")
+                    .interact()?
+                {
+                    for path in &paths {
+                        std::fs::remove_file(data_dir.join(path))?;
+                    }
+                    paths.clear();
+                    println!("All chats deleted.");
+                }
+            }
             _ => {
-                let path = data_dir.join(&paths[chosen - 1]);
+                let idx = chosen - 2;
+                let path = data_dir.join(&paths[idx]);
                 match Select::with_theme(&ColorfulTheme::default())
                     .with_prompt("What to do?")
                     .items(&["Open", "Delete"])
@@ -92,7 +106,7 @@ async fn history() -> Result<()> {
                     }
                     1 => {
                         std::fs::remove_file(&path)?;
-                        paths.remove(chosen - 1);
+                        paths.remove(idx);
                         println!("Chat deleted: {}", path.to_string_lossy());
                     }
                     _ => unreachable!(),

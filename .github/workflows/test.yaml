@@ -35,7 +35,7 @@ jobs:
 
       - name: Run build
         if: steps.cache-cargo-restore.outputs.cache-hit != 'true'
-        run: cargo build --all-features --all-targets
+        run: cargo build
 
       - name: Cache save
         if: steps.cache-cargo-restore.outputs.cache-hit != 'true'

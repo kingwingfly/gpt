@@ -167,7 +167,7 @@ mod tests {
 
     #[cfg(feature = "mock")]
     #[tokio::test]
-    #[ignore(reason = "GitHub Actions does not support mock server")]
+    // #[ignore(reason = "GitHub Actions does not support mock server")]
     async fn mock_chat_ask() {
         use crate::mock::Mock;
         use std::time::Duration;

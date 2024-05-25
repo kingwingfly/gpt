@@ -4,6 +4,7 @@ use std::fmt::Display;
 pub type Messages = Vec<Message>;
 
 #[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(test, derive(PartialEq))]
 pub struct Message {
     role: Role,
     content: String,
@@ -22,6 +23,7 @@ impl Message {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[cfg_attr(test, derive(PartialEq))]
 #[serde(rename_all = "lowercase")]
 pub enum Role {
     System,

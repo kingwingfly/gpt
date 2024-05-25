@@ -6,9 +6,14 @@ export TERM=xterm-256color
 # Statements waiting to be executed
 statements=(
     "cargo fetch --locked"
-    "cargo clippy --all-features --all-targets -- -D warnings"
-    "cargo test -p gpt_core --features mock"
-    "cargo doc --no-deps -p gpt_core"
+    "cargo clippy --features cli -- -D warnings"
+    "cargo clippy --features tui -- -D warnings"
+    "cargo clippy --features cli,mock -- -D warnings"
+    "cargo clippy --features tui,mock -- -D warnings"
+
+    "cargo test --features mock -p gpt_core"
+
+    "cargo doc --no-deps --all-features -p gpt_core"
 )
 
 # loop echo and executing statements

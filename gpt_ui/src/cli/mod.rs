@@ -8,7 +8,7 @@ use error::Result;
 /// The CLI application for interacting with the OpenAI chatGPT API
 #[derive(Debug, Parser)]
 #[clap(author, version = crate::VERSION, about)]
-pub struct App {
+pub struct Cli {
     #[command(subcommand)]
     subcmd: Option<Commands>,
 }
@@ -19,7 +19,7 @@ enum Commands {
     Config,
 }
 
-impl App {
+impl Cli {
     pub async fn run() -> Result<()> {
         let cli = Self::parse();
         match cli.subcmd {

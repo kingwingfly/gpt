@@ -1,7 +1,12 @@
-pub struct App {}
+mod error;
 
-impl App {
-    pub fn run() {
+use error::Result;
+
+pub struct Tui {}
+
+impl Tui {
+    pub fn run() -> Result<()> {
         println!("Hello from tui.");
+        Ok(())
     }
 }

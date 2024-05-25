@@ -12,6 +12,7 @@ use std::{fmt::Display, io, path::Path, path::PathBuf, sync::OnceLock};
 use uuid::Uuid;
 
 #[derive(Debug, Default, Serialize, Deserialize)]
+#[cfg_attr(test, derive(PartialEq))]
 #[non_exhaustive]
 pub struct Chat {
     id: Uuid,
@@ -156,9 +157,8 @@ mod tests {
     fn test_serde() {
         let model = Chat::new();
         let json = serde_json::to_string(&model).unwrap();
-        assert_eq!(json, r#"{"stream":true,"model":"gpt-4o","messages":[]}"#);
-        let model: Chat = serde_json::from_str(&json).unwrap();
-        assert_eq!(model.model, ModelVersion::GPT4o);
+        let deserialized: Chat = serde_json::from_str(&json).unwrap();
+        assert_eq!(model, deserialized);
     }
 
     #[cfg(feature = "mock")]

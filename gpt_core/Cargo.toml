@@ -2,7 +2,6 @@
 name = "gpt_core"
 version = "0.0.1"
 edition = "2021"
-all-features = true
 
 [package.metadata.docs.rs]
 all-features = true

@@ -9,12 +9,12 @@ gpt_ui = { path = "../gpt_ui" }
 
 [[bin]]
 name = "gpt_cli"
-path = "src/main.rs"
+path = "cli/src/main.rs"
 required-features = ["cli"]
 
 [[bin]]
 name = "gpt_tui"
-path = "src/main.rs"
+path = "tui/src/main.rs"
 required-features = ["tui"]
 
 [features]

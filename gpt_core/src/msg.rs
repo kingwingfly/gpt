@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-pub(crate) type Messages = Vec<Message>;
+pub type Messages = Vec<Message>;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Message {

@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::fs::OpenOptions;
 use url::Url;
 
+/// The name of the application for config save.
 const NAME: &str = "chatGPT";
 const KEYRING_ERROR_HINT: &str = "Keyring Error. Maybe no password manager is installed.";
 const KEY_ERROR_HINT: &str = "Invalid key.";
@@ -34,18 +35,36 @@ impl Config {
     }
 
     pub fn read() -> Result<Self> {
-        let file = config_file(false)?;
-        let mut config: Config = serde_json::from_reader(file)?;
-        config.api_key = keyring_entry().get_password().unwrap();
+        let config = match Self::read_mask_api_key() {
+            Ok(mut config) => {
+                config.api_key = keyring_entry()
+                    .get_password()
+                    .unwrap_or("unknown".to_string());
+                config
+            }
+            Err(_) => Config::new("https://api.openai.com/v1/chat/completions", "unknown"),
+        };
         Ok(config)
+    }
+
+    pub fn read_mask_api_key() -> Result<Self> {
+        Ok(serde_json::from_reader(config_file(false)?)?)
     }
 
     pub fn endpoint(&self) -> &Url {
         &self.endpoint
     }
 
+    pub fn set_endpoint(&mut self, endpoint: impl AsRef<str>) {
+        self.endpoint = Url::parse(endpoint.as_ref()).expect("Invalid URL.");
+    }
+
     pub fn api_key(&self) -> &str {
         &self.api_key
+    }
+
+    pub fn set_api_key(&mut self, api_key: impl AsRef<str>) {
+        self.api_key = api_key.as_ref().to_string();
     }
 }
 

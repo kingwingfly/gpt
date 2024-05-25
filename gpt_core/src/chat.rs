@@ -167,14 +167,14 @@ mod tests {
 
     #[cfg(feature = "mock")]
     #[tokio::test]
-    // #[ignore(reason = "GitHub Actions does not support mock server")]
+    #[ignore = "GitHub Actions does not support mock server"]
     async fn mock_chat_ask() {
         use crate::mock::Mock;
         use std::time::Duration;
 
         let chat = Chat::new();
         let config = Config::new("http://127.0.0.1:3000", "api-key");
-        let mock = Mock::new(3000, Duration::from_secs(10));
+        let mock = Mock::new(3000, Duration::from_secs(1));
         let mut output = vec![];
         let content = chat.ask(&config, &mut output).await.unwrap();
         assert_eq!(output, b"Response from mock server.\n");

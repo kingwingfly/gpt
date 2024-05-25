@@ -87,7 +87,8 @@ impl Chat {
         CLIENT.get_or_init(Client::new)
     }
 
-    pub async fn ask(&self, config: Config, output: &mut impl io::Write) -> Result<()> {
+    pub async fn ask(&self, config: &Config, output: &mut impl io::Write) -> Result<String> {
+        let mut content = String::new();
         let mut stream = Self::client()
             .post(config.endpoint().clone())
             .header(
@@ -107,6 +108,7 @@ impl Chat {
                         break;
                     }
                     if let Some(chunk) = serde_json::from_str::<Chunk>(chunk)?.content() {
+                        content.push_str(&chunk);
                         output.write_all(chunk.as_bytes())?;
                         output.flush()?;
                     }
@@ -114,7 +116,7 @@ impl Chat {
             }
         }
         output.write_all(b"\n")?;
-        Ok(())
+        Ok(content)
     }
 }
 
@@ -156,12 +158,11 @@ mod tests {
 
         let chat = Chat::new();
         let config = Config::new("http://127.0.0.1:3000", "api-key");
-        let jh = std::thread::spawn(|| {
-            let mock = Mock::new();
-            mock.run(3000, Duration::from_secs(1)).unwrap();
-        });
+        let mock = Mock::new(3000, Duration::from_secs(1));
         let mut output = vec![];
-        chat.ask(config, &mut output).await.unwrap();
-        jh.join().unwrap();
+        let content = chat.ask(&config, &mut output).await.unwrap();
+        assert_eq!(output, b"Response from mock server.\n");
+        assert_eq!(content, "Response from mock server.");
+        mock.close();
     }
 }

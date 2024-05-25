@@ -6,15 +6,17 @@ edition = "2021"
 [dependencies]
 gpt_core = { path = "../gpt_core" }
 gpt_ui = { path = "../gpt_ui" }
+# async
+tokio = { version = "1", features = ["full"] }
 
 [[bin]]
 name = "gpt_cli"
-path = "cli/src/main.rs"
+path = "cli.rs"
 required-features = ["cli"]
 
 [[bin]]
 name = "gpt_tui"
-path = "tui/src/main.rs"
+path = "tui.rs"
 required-features = ["tui"]
 
 [features]

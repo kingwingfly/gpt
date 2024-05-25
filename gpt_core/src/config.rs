@@ -51,9 +51,7 @@ impl Config {
     pub fn read() -> Result<Self> {
         let config = match Self::read_masked() {
             Ok(mut config) => {
-                config.api_key = keyring_entry()
-                    .get_password()
-                    .unwrap_or("unknown".to_string());
+                config.api_key = keyring_entry().get_password()?;
                 config
             }
             Err(_) => Config::new("https://api.openai.com/v1/chat/completions", "unknown"),

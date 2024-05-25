@@ -10,6 +10,13 @@ pub enum Error {
     Json { source: serde_json::Error },
     #[snafu(display("Reqwest error: {}", source), context(false))]
     Reqwest { source: reqwest::Error },
-    #[snafu(display("Keyring error: {}", source), context(false))]
+    #[cfg_attr(
+        not(feature = "mock"),
+        snafu(display("Keyring error: {}", source), context(false))
+    )]
+    #[cfg_attr(
+        feature = "mock",
+        snafu(display("**Mock** keyring error: {}", source), context(false))
+    )]
     Keyring { source: keyring::error::Error },
 }

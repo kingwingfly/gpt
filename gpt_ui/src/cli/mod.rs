@@ -4,7 +4,6 @@ mod error;
 
 use clap::{Parser, Subcommand};
 use error::Result;
-use gpt_core::config::Config;
 
 /// The CLI application for interacting with the OpenAI chatGPT API
 #[derive(Debug, Parser)]
@@ -21,13 +20,13 @@ enum Commands {
 }
 
 impl App {
-    pub fn run() -> Result<()> {
+    pub async fn run() -> Result<()> {
         let cli = Self::parse();
         match cli.subcmd {
             Some(subcmd) => match subcmd {
                 Commands::Config => config::config(),
             },
-            None => chat::chat(),
+            None => chat::chat().await,
         }
     }
 }

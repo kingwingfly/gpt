@@ -1,33 +1,40 @@
 use std::{
     io::Write,
     net::{SocketAddr, TcpListener, TcpStream},
+    sync::mpsc::{channel, Sender},
     time::Duration,
 };
 
-use crate::{data::Chunk, error::Result};
+use crate::data::Chunk;
 
-#[derive(Default)]
-pub struct Mock {}
+pub struct Mock {
+    tx: Sender<()>,
+}
 
 impl Mock {
-    pub fn new() -> Self {
-        Self::default()
+    pub fn new(port: u16, close_idle: Duration) -> Self {
+        let (tx, rx) = channel();
+        std::thread::spawn(move || {
+            let addr = SocketAddr::from(([127, 0, 0, 1], port));
+            println!("Mock server is running on {}", addr);
+            let listener = TcpListener::bind(addr).unwrap();
+            listener.set_nonblocking(true).unwrap();
+            let mut instant = std::time::Instant::now();
+            loop {
+                if let Ok((stream, _)) = listener.accept() {
+                    handle_stream(stream);
+                    instant = std::time::Instant::now();
+                } else if (instant.elapsed() > close_idle) | rx.try_recv().is_ok() {
+                    break;
+                }
+            }
+        });
+
+        Self { tx }
     }
 
-    pub fn run(&self, port: u16, close_idle: Duration) -> Result<()> {
-        let addr = SocketAddr::from(([127, 0, 0, 1], port));
-        let listener = TcpListener::bind(addr)?;
-        listener.set_nonblocking(true)?;
-        let mut instant = std::time::Instant::now();
-        loop {
-            if let Ok((stream, _)) = listener.accept() {
-                handle_stream(stream);
-                instant = std::time::Instant::now();
-            } else if instant.elapsed() > close_idle {
-                break;
-            }
-        }
-        Ok(())
+    pub fn close(&self) {
+        self.tx.send(()).ok();
     }
 }
 

@@ -74,12 +74,13 @@ jobs:
           # (required) GitHub token for uploading assets to GitHub Releases.
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: taiki-e/upload-rust-binary-action@v1
-        with:
-          bin: gpt_tui
-          features: tui
-          target: ${{ matrix.target }}
-          archive: $bin-$tag-$target
-          tar: unix
-          zip: windows
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # WIP
+      # - uses: taiki-e/upload-rust-binary-action@v1
+      #   with:
+      #     bin: gpt_tui
+      #     features: tui
+      #     target: ${{ matrix.target }}
+      #     archive: $bin-$tag-$target
+      #     tar: unix
+      #     zip: windows
+      #     token: ${{ secrets.GITHUB_TOKEN }}

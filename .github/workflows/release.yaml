@@ -12,10 +12,14 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  create-release:
+  prepare-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: run tests
+        run: .github/scripts/test.sh
+
       - uses: taiki-e/create-gh-release-action@v1
         with:
           # (optional) Path to changelog.

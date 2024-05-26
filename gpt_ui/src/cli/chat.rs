@@ -94,13 +94,12 @@ async fn history() -> Result<()> {
         ops.extend_from_slice(&paths);
         #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
         let ops = (0..ops.len()).map(|i| (i, &ops[i], "")).collect::<Vec<_>>();
-        let chosen = select("Choose: ", &ops)?;
-        match chosen {
-            0 => {
+        match select("Choose: ", &ops) {
+            Ok(0) => {
                 new_chat(Chat::new()).await?;
                 break;
             }
-            1 => {
+            Ok(1) => {
                 if confirm("Are you sure to delete all?")? {
                     for path in &paths {
                         std::fs::remove_file(data_dir.join(path))?;
@@ -109,8 +108,8 @@ async fn history() -> Result<()> {
                     println!("All chats deleted.");
                 }
             }
-            2 => break,
-            _ => {
+            Ok(2) | Err(_) => break,
+            Ok(chosen) => {
                 let idx = chosen - 3;
                 let path = data_dir.join(&paths[idx]);
                 let items = ["Open", "Delete"];

@@ -14,7 +14,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 - fix: config and data dir coflict on windows
 - fix: ctrl-c cannot work on windows
-
+- enhance: topic summary when save
 
 ## [0.0.1-alpha2] - 2024-05-26
 

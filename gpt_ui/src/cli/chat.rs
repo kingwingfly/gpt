@@ -62,6 +62,15 @@ async fn new_chat(mut chat: Chat) -> Result<()> {
     }
     println!();
     if confirm("Do you want to save this chat?")? {
+        if chat.topic().is_empty() {
+            println!("generating summary...");
+            let mut summary_chat = Chat::summary_extraction();
+            let content = &format!("{}", chat);
+            summary_chat.add_message(Role::User, content.to_owned());
+            let mut topic = vec![];
+            summary_chat.ask(&config, &mut topic).await?;
+            chat.set_topic(String::from_utf8_lossy(&topic).trim().to_string());
+        }
         let path = chat.save_to_dir(gpt_core::config::data_dir()?)?;
         println!("Chat saved: {}", path.to_string_lossy());
     }
@@ -106,7 +115,7 @@ async fn history() -> Result<()> {
                 let path = data_dir.join(&paths[idx]);
                 let items = ["Open", "Delete"];
                 #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
-                let items = (0..ops.len())
+                let items = (0..items.len())
                     .map(|i| (i, items[i], ""))
                     .collect::<Vec<_>>();
                 match select("What to do?", &items)? {

@@ -18,6 +18,7 @@ use uuid::Uuid;
 pub struct Chat {
     id: Uuid,
     topic: String,
+    temperature: f32,
     stream: bool,
     model: ModelVersion,
     messages: Messages,
@@ -43,8 +44,20 @@ impl Chat {
         Self {
             id: Uuid::now_v7(),
             stream: true,
+            temperature: 0.3,
             ..Default::default()
         }
+    }
+
+    pub fn summary_extraction() -> Self {
+        let mut res = Self {
+            id: Uuid::now_v7(),
+            stream: true,
+            temperature: 0.,
+            ..Default::default()
+        };
+        res.add_message(Role::System, "You are a highly skilled AI trained in language comprehension and summarization. I would like you to read the following text and summarize its topic in a pretty short sentence, aiming to be used as an article tittle".to_string());
+        res
     }
 
     pub fn read_from_path<P: AsRef<Path>>(path: P) -> Result<Self> {
@@ -58,7 +71,11 @@ impl Chat {
         let path = path
             .as_ref()
             .to_path_buf()
-            .join(format!("{}-{}.json", self.topic(), self.id));
+            .join(sanitize_filename::sanitize(format!(
+                "{}-{}.json",
+                self.topic(),
+                self.id
+            )));
         let file = std::fs::File::create(&path)?;
         serde_json::to_writer(file, self)?;
         Ok(path)

@@ -9,7 +9,7 @@ description = "Call chatGPT with CLI."
 license = "MIT"
 edition = "2021"
 repository = "https://github.com/kingwingfly/gpt_cli"
-documentation = ""
+documentation = "https://docs.rs/gpt_core"
 
 [workspace.dependencies]
 serde = { version = "1.0", features = ["derive"] }

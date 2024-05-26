@@ -13,23 +13,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/kingwingfly/repo_name">
+  <a href="https://github.com/kingwingfly/gpt">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">gpt_ui</h3>
 
   <p align="center">
-    project_description
+    A CLI and TUI for chatGPT built with Rust. And offer a core crate for chatGPT app.
     <br />
-    <a href="https://github.com/kingwingfly/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/kingwingfly/gpt"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/kingwingfly/repo_name">View Demo</a>
+    <a href="https://github.com/kingwingfly/gpt">View Demo</a>
     ·
-    <a href="https://github.com/kingwingfly/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/kingwingfly/gpt/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
-    <a href="https://github.com/kingwingfly/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/kingwingfly/gpt/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -66,9 +66,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://github.com/kingwingfly/gpt)
 
-Change these: `repo_name`, `project_title`, `project_description`, `documentation_link`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -85,6 +84,8 @@ Change these: `repo_name`, `project_title`, `project_description`, `documentatio
 <!-- GETTING STARTED -->
 ## Getting Started
 
+Download in [release page](https://github.com/kingwingfly/gpt/releases) or compile it yourself:
+
 ### Prerequisites
 
 * Install Rust
@@ -96,7 +97,7 @@ Change these: `repo_name`, `project_title`, `project_description`, `documentatio
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/kingwingfly/repo_name.git
+   git clone https://github.com/kingwingfly/gpt.git
    ```
 2. Compilation
    ```sh
@@ -110,9 +111,17 @@ Change these: `repo_name`, `project_title`, `project_description`, `documentatio
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+```sh
+# start chatting
+gpt_cli
+# config
+gpt_cli config
+# quit
+On windows: select quit option (bug in dialoguer or cliclack)
+On linux, macOS: ctrl-c
+```
 
-_For more examples, please refer to the [Documentation](documentation_link)_
+_For more examples, please refer to the [Documentation](https://docs.rs/gpt_core)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -123,7 +132,7 @@ _For more examples, please refer to the [Documentation](documentation_link)_
 
 - [ ] Feature
 
-See the [open issues](https://github.com/kingwingfly/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/kingwingfly/gpt/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -161,7 +170,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Louis - 836250617@qq.com
 
-Project Link: [https://github.com/kingwingfly/repo_name](https://github.com/kingwingfly/repo_name)
+Project Link: [https://github.com/kingwingfly/gpt](https://github.com/kingwingfly/gpt)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -178,16 +187,16 @@ Project Link: [https://github.com/kingwingfly/repo_name](https://github.com/king
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/kingwingfly/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/kingwingfly/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/kingwingfly/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/kingwingfly/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/kingwingfly/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/kingwingfly/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/kingwingfly/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/kingwingfly/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/kingwingfly/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/kingwingfly/repo_name/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/kingwingfly/gpt.svg?style=for-the-badge
+[contributors-url]: https://github.com/kingwingfly/gpt/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/kingwingfly/gpt.svg?style=for-the-badge
+[forks-url]: https://github.com/kingwingfly/gpt/network/members
+[stars-shield]: https://img.shields.io/github/stars/kingwingfly/gpt.svg?style=for-the-badge
+[stars-url]: https://github.com/kingwingfly/gpt/stargazers
+[issues-shield]: https://img.shields.io/github/issues/kingwingfly/gpt.svg?style=for-the-badge
+[issues-url]: https://github.com/kingwingfly/gpt/issues
+[license-shield]: https://img.shields.io/github/license/kingwingfly/gpt.svg?style=for-the-badge
+[license-url]: https://github.com/kingwingfly/gpt/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png
 [Rust]: https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=Rust&logoColor=orange
 [Rust-url]: https://www.rust-lang.org

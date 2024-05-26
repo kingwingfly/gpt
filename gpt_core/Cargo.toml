@@ -1,7 +1,12 @@
 [package]
 name = "gpt_core"
 version = "0.0.1-alpha3"
-edition = "2021"
+authors.workspace = true
+description = "chatGPT UI's core crate. Offer the basic functionalities for chatGPT UI."
+license.workspace = true
+edition.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/gpt_core"
 
 [package.metadata.docs.rs]
 all-features = true

@@ -66,7 +66,7 @@ impl Config {
 
     /// Read the config file without reading the api_key.
     pub fn read_masked() -> Result<Self> {
-        Ok(serde_json::from_reader(config_file(false)?)?)
+        Ok(serde_json::from_reader(config_file(false)?).unwrap_or_default())
     }
 
     pub fn endpoint(&self) -> &Url {

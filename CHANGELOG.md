@@ -10,9 +10,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 ## [Unreleased]
 
-### [0.0.1-alpha2] - 2024-05-26
+## [0.0.1-alpha2] - 2024-05-26
 
-- cli history: delete all
+- cli history: delete all.
+- cli fix: panic if no config file.
 
 ## [0.0.1-alpha1] - 2024-05-26
 - MVP

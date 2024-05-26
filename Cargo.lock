@@ -970,7 +970,7 @@ checksum = "4271d37baee1b8c7e4b708028c57d816cf9d2434acb33a549475f78c181f6253"
 
 [[package]]
 name = "gpt"
-version = "0.0.1-alpha2"
+version = "0.0.1-alpha3"
 dependencies = [
  "gpt_core",
  "gpt_ui",
@@ -979,7 +979,7 @@ dependencies = [
 
 [[package]]
 name = "gpt_core"
-version = "0.0.1-alpha2"
+version = "0.0.1-alpha3"
 dependencies = [
  "dirs",
  "futures-util",
@@ -996,7 +996,7 @@ dependencies = [
 
 [[package]]
 name = "gpt_ui"
-version = "0.0.1-alpha2"
+version = "0.0.1-alpha3"
 dependencies = [
  "clap",
  "cliclack",

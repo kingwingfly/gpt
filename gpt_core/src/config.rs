@@ -107,7 +107,10 @@ pub fn data_dir() -> std::io::Result<PathBuf> {
     #[cfg(feature = "mock")]
     let data_dir = PathBuf::from(env!("OUT_DIR")).join(NAME).join("data");
     #[cfg(not(feature = "mock"))]
-    let data_dir = dirs::data_dir().expect("Cannot find data dir.").join(NAME);
+    let data_dir = dirs::data_dir()
+        .expect("Cannot find data dir.")
+        .join(NAME)
+        .join("data");
     std::fs::create_dir_all(&data_dir)?;
     Ok(data_dir)
 }

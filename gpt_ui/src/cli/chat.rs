@@ -49,6 +49,7 @@ async fn new_chat(mut chat: Chat) -> Result<()> {
             _ = tokio::signal::ctrl_c() => break,
         }
     }
+    println!();
     if Confirm::new()
         .with_prompt("Do you want to save this chat?")
         .interact()?

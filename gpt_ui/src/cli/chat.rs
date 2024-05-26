@@ -12,12 +12,10 @@ pub(crate) async fn chat() -> Result<()> {
     let items = (0..items.len())
         .map(|i| (i, items[i], ""))
         .collect::<Vec<_>>();
-    let chosen = select("Let's chat!", &items)?;
-    match chosen {
-        0 => new_chat(Chat::new()).await?,
-        1 => history().await?,
-        2 => {}
-        _ => unreachable!(),
+    match select("Let's chat!", &items) {
+        Ok(0) => new_chat(Chat::new()).await?,
+        Ok(1) => history().await?,
+        _ => {}
     }
     #[cfg(feature = "mock")]
     mock.close();

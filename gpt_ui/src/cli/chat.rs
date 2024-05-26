@@ -40,9 +40,8 @@ async fn new_chat(mut chat: Chat) -> Result<()> {
                 } else {
                     if confirm("Quit?")? {
                         break;
-                    } else {
-                        continue;
                     }
+                    continue;
                 }
             }
             Err(_) => break,

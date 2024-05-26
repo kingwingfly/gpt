@@ -17,6 +17,8 @@ cliclack = { version = "0.2.5", optional = true }
 tokio = { version = "1", features = ["macros", "signal"] }
 # tools
 const_format = "0.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
 ctrlc = { version = "3.4.4", optional = true }
 
 [build-dependencies]
@@ -27,5 +29,5 @@ default = ["cliclack", "cli"]
 mock = ["gpt_core/mock"]
 cli = ["dep:clap"]
 tui = ["dep:crossterm", "dep:ratatui"]
-dialoguer = ["dep:dialoguer", "dep:ctrlc"]
-cliclack = ["dep:cliclack", "dep:ctrlc"]
+dialoguer = ["dep:dialoguer"]
+cliclack = ["dep:cliclack"]

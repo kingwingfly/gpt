@@ -19,12 +19,12 @@ pub struct Cli {
 #[derive(Debug, Subcommand)]
 #[non_exhaustive]
 enum Commands {
-    /// Configure the CLI.
-    Config,
     /// Chat with the OpenAI chatGPT API.
     New,
     /// History of chat with the OpenAI chatGPT API.
     History,
+    /// Configure the CLI.
+    Config,
 }
 
 impl Cli {
@@ -33,9 +33,9 @@ impl Cli {
         let cli = Self::parse();
         match cli.subcmd {
             Some(subcmd) => match subcmd {
-                Commands::Config => config::config(),
                 Commands::New => chat::new_chat(Chat::new()).await,
                 Commands::History => chat::history().await,
+                Commands::Config => config::config(),
             },
             None => chat::chat().await,
         }

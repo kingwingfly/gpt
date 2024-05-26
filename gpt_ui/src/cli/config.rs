@@ -7,11 +7,10 @@ pub(crate) fn config() -> Result<()> {
     let items = &["Display", "Modify"];
     #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
     let items = &[(0, "Display", ""), (1, "Modify", "")];
-    let chosen = select("Action to your config?", items)?;
-    match chosen {
-        0 => display(),
-        1 => modify(),
-        _ => unreachable!(),
+    match select("Action to your config?", items) {
+        Ok(0) => display(),
+        Ok(1) => modify(),
+        _ => Ok(()),
     }
 }
 
@@ -29,13 +28,13 @@ fn display() -> Result<()> {
 
 fn modify() -> Result<()> {
     let mut config = Config::read_masked()?;
-    let endpoint = input(" Endpoint? [Empty to unchange]\n", config.endpoint())?;
-    if !endpoint.is_empty() {
-        config.set_endpoint(endpoint);
+    match input(" Endpoint? [Empty to unchange]\n", config.endpoint()) {
+        Ok(content) if !content.is_empty() => config.set_endpoint(content),
+        _ => {}
     }
-    let api_key = password("API Key? [Hidden]\n")?;
-    if !api_key.is_empty() {
-        config.set_api_key(api_key);
+    match password("API Key? [Hidden]\n") {
+        Ok(content) if !content.is_empty() => config.set_api_key(content),
+        _ => {}
     }
     config.save()?;
     display()

@@ -12,7 +12,7 @@ pub(crate) async fn chat() -> Result<()> {
     let items = (0..items.len())
         .map(|i| (i, items[i], ""))
         .collect::<Vec<_>>();
-    let chosen = select("Let's chat!", &items).unwrap();
+    let chosen = select("Let's chat!", &items)?;
     match chosen {
         0 => new_chat(Chat::new()).await?,
         1 => history().await?,
@@ -61,7 +61,7 @@ async fn new_chat(mut chat: Chat) -> Result<()> {
         }
     }
     println!();
-    if confirm("Do you want to save this chat?")? {
+    if let Ok(true) = confirm("Do you want to save this chat?") {
         if chat.topic().is_empty() {
             println!("generating summary...");
             let mut summary_chat = Chat::summary_extraction();

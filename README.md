@@ -119,8 +119,7 @@ gpt_cli
 # config
 gpt_cli config
 # quit
-On windows: select quit option (bug in dialoguer or cliclack)
-On linux, macOS: ctrl-c
+ESC
 ```
 
 _For more examples, please refer to the [Documentation](https://docs.rs/gpt_core)_

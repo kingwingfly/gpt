@@ -10,6 +10,11 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 ## [Unreleased]
 
+## [0.0.1-alpha4] - 2024-05-26
+
+fix: ESC not work;
+disable ctrl-c on all targets;
+
 ## [0.0.1-alpha3] - 2024-05-26
 
 - fix: config and data dir coflict on windows

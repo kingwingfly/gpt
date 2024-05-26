@@ -2,7 +2,6 @@ use super::error::Result;
 use std::fmt::Display;
 
 pub(super) fn init_dialog() {
-    #[cfg(target_os = "windows")]
     ctrlc::set_handler(|| {}).expect("Error setting Ctrl-C handler");
 }
 

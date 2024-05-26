@@ -1,6 +1,6 @@
 [package]
 name = "gpt"
-version = "0.0.1-alpha3"
+version.workspace = true
 authors.workspace = true
 description = "chatGPT UI's entry."
 license.workspace = true

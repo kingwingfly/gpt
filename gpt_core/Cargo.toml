@@ -1,6 +1,6 @@
 [package]
 name = "gpt_core"
-version = "0.0.1-alpha3"
+version.workspace = true
 authors.workspace = true
 description = "chatGPT UI's core crate. Offer the basic functionalities for chatGPT UI."
 license.workspace = true

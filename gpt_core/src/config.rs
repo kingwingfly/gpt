@@ -2,7 +2,6 @@ use crate::error::Result;
 use keyring::Entry;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use std::fs::OpenOptions;
 use std::path::PathBuf;
 use url::Url;
 
@@ -14,7 +13,6 @@ const API_KEY_ERROR_HINT: &str = "Failed store API Key. Maybe no password manage
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     endpoint: Url,
-    #[serde(skip, default = "masked")]
     api_key: String,
 }
 
@@ -50,25 +48,23 @@ impl Config {
     }
 
     pub fn save(&self) -> Result<()> {
-        let file = config_file(true)?;
-        serde_json::to_writer(file, self)?;
         if !self.api_key.is_empty() {
             keyring_entry()
-                .set_password(&self.api_key)
+                .set_password(&serde_json::to_string(self)?)
                 .expect(API_KEY_ERROR_HINT);
         }
         Ok(())
     }
 
     pub fn read() -> Result<Self> {
-        let mut config = Self::read_masked()?;
-        config.api_key = keyring_entry().get_password()?;
-        Ok(config)
+        Ok(serde_json::from_str(&keyring_entry().get_password()?).unwrap_or_default())
     }
 
     /// Read the config file without reading the api_key.
     pub fn read_masked() -> Result<Self> {
-        Ok(serde_json::from_reader(config_file(false)?).unwrap_or_default())
+        let mut res = Self::read()?;
+        res.set_api_key(masked());
+        Ok(res)
     }
 
     pub fn endpoint(&self) -> &Url {
@@ -86,23 +82,6 @@ impl Config {
     pub fn set_api_key(&mut self, api_key: impl AsRef<str>) {
         self.api_key = api_key.as_ref().to_string();
     }
-}
-
-pub fn config_file(truncate: bool) -> std::io::Result<std::fs::File> {
-    #[cfg(feature = "mock")]
-    let config_dir = PathBuf::from(env!("OUT_DIR")).join(NAME).join("config");
-    #[cfg(not(feature = "mock"))]
-    let config_dir = dirs::config_dir()
-        .expect("Cannot find config dir.")
-        .join(NAME);
-    std::fs::create_dir_all(&config_dir)?;
-    let config_path = config_dir.join("config.json");
-    OpenOptions::new()
-        .create(true)
-        .write(true)
-        .read(true)
-        .truncate(truncate)
-        .open(config_path)
 }
 
 pub fn data_dir() -> std::io::Result<PathBuf> {

@@ -10,10 +10,14 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 ## [Unreleased]
 
+## [0.0.1-alpha5] - 2024-05-26
+
+security: save endpoint to keyring, too
+
 ## [0.0.1-alpha4] - 2024-05-26
 
-fix: ESC not work;
-disable ctrl-c on all targets;
+fix: ESC not work
+disable ctrl-c on all targets
 fix: a bug removing api key
 
 ## [0.0.1-alpha3] - 2024-05-26

@@ -14,6 +14,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 fix: ESC not work;
 disable ctrl-c on all targets;
+fix: a bug removing api key
 
 ## [0.0.1-alpha3] - 2024-05-26
 

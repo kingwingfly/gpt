@@ -33,8 +33,8 @@ fn modify() -> Result<()> {
         _ => {}
     }
     match password("API Key? [Hidden]\n") {
-        Ok(content) if !content.is_empty() => config.set_api_key(content),
-        _ => {}
+        Ok(content) => config.set_api_key(content),
+        _ => config.set_api_key(""), // pwd won't save if empty
     }
     config.save()?;
     display()

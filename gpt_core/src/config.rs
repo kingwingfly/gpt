@@ -52,9 +52,11 @@ impl Config {
     pub fn save(&self) -> Result<()> {
         let file = config_file(true)?;
         serde_json::to_writer(file, self)?;
-        keyring_entry()
-            .set_password(&self.api_key)
-            .expect(API_KEY_ERROR_HINT);
+        if !self.api_key.is_empty() {
+            keyring_entry()
+                .set_password(&self.api_key)
+                .expect(API_KEY_ERROR_HINT);
+        }
         Ok(())
     }
 

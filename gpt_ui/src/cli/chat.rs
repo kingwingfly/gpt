@@ -115,18 +115,18 @@ async fn history() -> Result<()> {
                 let items = (0..items.len())
                     .map(|i| (i, items[i], ""))
                     .collect::<Vec<_>>();
-                match select("What to do?", &items)? {
-                    0 => {
+                match select("What to do?", &items) {
+                    Ok(0) => {
                         let chat = Chat::read_from_path(path)?;
                         new_chat(chat).await?;
                         break;
                     }
-                    1 => {
+                    Ok(1) => {
                         std::fs::remove_file(&path)?;
                         paths.remove(idx);
                         println!("Chat deleted: {}", path.to_string_lossy());
                     }
-                    _ => unreachable!(),
+                    _ => {}
                 }
             }
         }

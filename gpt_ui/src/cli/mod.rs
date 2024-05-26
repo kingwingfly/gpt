@@ -6,6 +6,7 @@ mod error;
 use clap::{Parser, Subcommand};
 use dialog::init_dialog;
 use error::Result;
+use gpt_core::chat::Chat;
 
 /// The CLI application for interacting with the OpenAI chatGPT API
 #[derive(Debug, Parser)]
@@ -16,9 +17,14 @@ pub struct Cli {
 }
 
 #[derive(Debug, Subcommand)]
+#[non_exhaustive]
 enum Commands {
     /// Configure the CLI.
     Config,
+    /// Chat with the OpenAI chatGPT API.
+    New,
+    /// History of chat with the OpenAI chatGPT API.
+    History,
 }
 
 impl Cli {
@@ -28,6 +34,8 @@ impl Cli {
         match cli.subcmd {
             Some(subcmd) => match subcmd {
                 Commands::Config => config::config(),
+                Commands::New => chat::new_chat(Chat::new()).await,
+                Commands::History => chat::history().await,
             },
             None => chat::chat().await,
         }

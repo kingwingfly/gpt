@@ -13,6 +13,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 ## [0.0.1-alpha5] - 2024-05-26
 
 security: save endpoint to keyring, too
+improve: more entries
 
 ## [0.0.1-alpha4] - 2024-05-26
 

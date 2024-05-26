@@ -7,7 +7,7 @@ use gpt_core::{chat::Chat, config::Config, msg::Role};
 pub(crate) async fn chat() -> Result<()> {
     #[cfg(feature = "mock")]
     let mock = gpt_core::mock::Mock::new(3000, std::time::Duration::from_secs(60));
-    let items = ["New", "History", "Quit"];
+    let items = ["New", "History", "Config", "Quit"];
     #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
     let items = (0..items.len())
         .map(|i| (i, items[i], ""))
@@ -15,6 +15,7 @@ pub(crate) async fn chat() -> Result<()> {
     match select("Let's chat!", &items) {
         Ok(0) => new_chat(Chat::new()).await?,
         Ok(1) => history().await?,
+        Ok(2) => super::config::config()?,
         _ => {}
     }
     #[cfg(feature = "mock")]
@@ -22,7 +23,7 @@ pub(crate) async fn chat() -> Result<()> {
     Ok(())
 }
 
-async fn new_chat(mut chat: Chat) -> Result<()> {
+pub(crate) async fn new_chat(mut chat: Chat) -> Result<()> {
     #[cfg(not(feature = "mock"))]
     let config = Config::read()?;
     #[cfg(feature = "mock")]
@@ -75,7 +76,7 @@ async fn new_chat(mut chat: Chat) -> Result<()> {
     Ok(())
 }
 
-async fn history() -> Result<()> {
+pub(crate) async fn history() -> Result<()> {
     let data_dir = gpt_core::config::data_dir()?;
 
     let mut paths: Vec<String> = std::fs::read_dir(&data_dir)?

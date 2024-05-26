@@ -28,9 +28,11 @@ impl Display for Chat {
         writeln!(f, "Chat ID: {}", self.id)?;
         writeln!(f, "Topic: {}", self.topic)?;
         writeln!(f, "Model: {:?}", self.model)?;
-        writeln!(f, "Dialog:\n")?;
-        for msg in &self.messages {
-            writeln!(f, "{}", msg)?;
+        if !self.messages.is_empty() {
+            writeln!(f, "History Dialog:")?;
+            for msg in &self.messages {
+                writeln!(f, "{}", msg)?;
+            }
         }
         Ok(())
     }

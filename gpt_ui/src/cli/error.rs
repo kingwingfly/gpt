@@ -8,6 +8,7 @@ pub enum Error {
     Io { source: std::io::Error },
     #[snafu(display("Core error: {}", source), context(false))]
     Core { source: gpt_core::error::Error },
+    #[cfg(feature = "dialoguer")]
     #[snafu(display("Dialog error: {}", source), context(false))]
     Dialog { source: dialoguer::Error },
 }

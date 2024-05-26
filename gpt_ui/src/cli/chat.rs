@@ -1,18 +1,22 @@
-use super::error::Result;
-use dialoguer::{theme::ColorfulTheme, Confirm, Input, Select};
+use super::{
+    dialog::{confirm, input, select},
+    error::Result,
+};
 use gpt_core::{chat::Chat, config::Config, msg::Role};
 
 pub(crate) async fn chat() -> Result<()> {
     #[cfg(feature = "mock")]
     let mock = gpt_core::mock::Mock::new(3000, std::time::Duration::from_secs(60));
-    let selection = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("Let's chat!")
-        .items(&["New", "History"])
-        .interact()
-        .unwrap();
-    match selection {
+    let items = ["New", "History", "Quit"];
+    #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
+    let items = (0..items.len())
+        .map(|i| (i, items[i], ""))
+        .collect::<Vec<_>>();
+    let chosen = select("Let's chat!", &items).unwrap();
+    match chosen {
         0 => new_chat(Chat::new()).await?,
         1 => history().await?,
+        2 => {}
         _ => unreachable!(),
     }
     #[cfg(feature = "mock")]
@@ -24,15 +28,23 @@ async fn new_chat(mut chat: Chat) -> Result<()> {
     #[cfg(not(feature = "mock"))]
     let config = Config::read()?;
     #[cfg(feature = "mock")]
-    let config = Config::new("http://127.0.0.1:3000", "");
+    let config = Config::new(crate::MOCK_SERVER, "");
     println!("{}", chat);
     let mut stdout = std::io::stdout();
     loop {
-        let content = Input::<String>::with_theme(&ColorfulTheme::default())
-            .with_prompt("You: ")
-            .interact();
+        let content = input("You:", "");
         match content {
-            Ok(content) => chat.add_message(Role::User, content),
+            Ok(content) => {
+                if !content.is_empty() {
+                    chat.add_message(Role::User, content)
+                } else {
+                    if confirm("Quit?")? {
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+            }
             Err(_) => break,
         }
         tokio::select! {
@@ -50,10 +62,7 @@ async fn new_chat(mut chat: Chat) -> Result<()> {
         }
     }
     println!();
-    if Confirm::new()
-        .with_prompt("Do you want to save this chat?")
-        .interact()?
-    {
+    if confirm("Do you want to save this chat?")? {
         let path = chat.save_to_dir(gpt_core::config::data_dir()?)?;
         println!("Chat saved: {}", path.to_string_lossy());
     }
@@ -62,29 +71,29 @@ async fn new_chat(mut chat: Chat) -> Result<()> {
 
 async fn history() -> Result<()> {
     let data_dir = gpt_core::config::data_dir()?;
-    let mut paths = std::fs::read_dir(&data_dir)?
+
+    let mut paths: Vec<String> = std::fs::read_dir(&data_dir)?
         .filter_map(|entry| entry.ok())
         .filter(|entry| entry.path().is_file())
         .map(|entry| entry.file_name().to_string_lossy().to_string())
-        .collect::<Vec<_>>();
+        .collect();
     loop {
-        let chosen = Select::with_theme(&ColorfulTheme::default())
-            .with_prompt("Choose")
-            .item("New")
-            .item("Delete all")
-            .items(&paths)
-            .max_length(10)
-            .interact()?;
+        let mut ops = vec![
+            "New".to_string(),
+            "Delete all".to_string(),
+            "Quit".to_string(),
+        ];
+        ops.extend_from_slice(&paths);
+        #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
+        let ops = (0..ops.len()).map(|i| (i, &ops[i], "")).collect::<Vec<_>>();
+        let chosen = select("Choose: ", &ops)?;
         match chosen {
             0 => {
                 new_chat(Chat::new()).await?;
                 break;
             }
             1 => {
-                if Confirm::new()
-                    .with_prompt("Are you sure to delete all?")
-                    .interact()?
-                {
+                if confirm("Are you sure to delete all?")? {
                     for path in &paths {
                         std::fs::remove_file(data_dir.join(path))?;
                     }
@@ -92,14 +101,16 @@ async fn history() -> Result<()> {
                     println!("All chats deleted.");
                 }
             }
+            2 => break,
             _ => {
-                let idx = chosen - 2;
+                let idx = chosen - 3;
                 let path = data_dir.join(&paths[idx]);
-                match Select::with_theme(&ColorfulTheme::default())
-                    .with_prompt("What to do?")
-                    .items(&["Open", "Delete"])
-                    .interact()?
-                {
+                let items = ["Open", "Delete"];
+                #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
+                let items = (0..ops.len())
+                    .map(|i| (i, items[i], ""))
+                    .collect::<Vec<_>>();
+                match select("What to do?", &items)? {
                     0 => {
                         let chat = Chat::read_from_path(path)?;
                         new_chat(chat).await?;

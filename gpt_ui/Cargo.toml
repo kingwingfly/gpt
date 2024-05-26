@@ -11,17 +11,21 @@ snafu = { workspace = true }
 crossterm = { version = "0.27.0", optional = true }
 ratatui = { version = "0.26.3", optional = true }
 clap = { version = "4.5.4", optional = true, features = ["derive"] }
-dialoguer = { version = "0.11.0", optional = true, features = [] }
+dialoguer = { version = "0.11.0", optional = true }
+cliclack = { version = "0.2.5", optional = true }
 # async
 tokio = { version = "1", features = ["macros", "signal"] }
 # tools
 const_format = "0.2"
+ctrlc = { version = "3.4.4", optional = true }
 
 [build-dependencies]
 vergen = { version = "8.3", features = ["git", "rustc", "gitcl"] }
 
 [features]
-default = ["cli"]
+default = ["cliclack", "cli"]
 mock = ["gpt_core/mock"]
-cli = ["dep:clap", "dep:dialoguer"]
+cli = ["dep:clap"]
 tui = ["dep:crossterm", "dep:ratatui"]
+dialoguer = ["dep:dialoguer", "dep:ctrlc"]
+cliclack = ["dep:cliclack", "dep:ctrlc"]

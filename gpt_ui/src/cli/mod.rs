@@ -1,8 +1,10 @@
 mod chat;
 mod config;
+mod dialog;
 mod error;
 
 use clap::{Parser, Subcommand};
+use dialog::init_dialog;
 use error::Result;
 
 /// The CLI application for interacting with the OpenAI chatGPT API
@@ -21,6 +23,7 @@ enum Commands {
 
 impl Cli {
     pub async fn run() -> Result<()> {
+        init_dialog();
         let cli = Self::parse();
         match cli.subcmd {
             Some(subcmd) => match subcmd {

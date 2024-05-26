@@ -84,7 +84,9 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Download in [release page](https://github.com/kingwingfly/gpt/releases) or compile it yourself:
+Download in [release page](https://github.com/kingwingfly/gpt/releases) or compile it yourself.
+
+For windows users, there's bug upstream when handling ctrl-c, you can quit by entering empty line or select quit option.
 
 ### Prerequisites
 

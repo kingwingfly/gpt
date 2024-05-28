@@ -56,11 +56,14 @@ impl Config {
         Ok(())
     }
 
+    /// Read the config file without masking api_key.
+    /// If no Config saved, it will return default Config.
     pub fn read() -> Result<Self> {
         Ok(serde_json::from_str(&keyring_entry().get_password()?).unwrap_or_default())
     }
 
     /// Read the config file without reading the api_key.
+    /// If no Config saved, it will return default Config.
     pub fn read_masked() -> Result<Self> {
         let mut res = Self::read()?;
         res.set_api_key(masked());

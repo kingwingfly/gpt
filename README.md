@@ -180,7 +180,7 @@ Project Link: [https://github.com/kingwingfly/gpt](https://github.com/kingwingfl
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
+* [chatGPT stream rustd demo](https://github.com/a-poor/openai-stream-rust-demo)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

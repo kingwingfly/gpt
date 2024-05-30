@@ -19,6 +19,7 @@ pub(super) fn input(prompt: impl AsRef<str>, _: impl AsRef<str>) -> Result<Strin
 pub(super) fn input(prompt: impl AsRef<str>, placeholder: impl AsRef<str>) -> Result<String> {
     Ok(cliclack::Input::new(prompt.as_ref())
         .placeholder(placeholder.as_ref())
+        .multiline(true)
         .required(false)
         .interact()?)
 }

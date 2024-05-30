@@ -59,7 +59,10 @@ impl Config {
     /// Read the config file without masking api_key.
     /// If no Config saved, it will return default Config.
     pub fn read() -> Result<Self> {
-        Ok(serde_json::from_str(&keyring_entry().get_password()?).unwrap_or_default())
+        Ok(match keyring_entry().get_password() {
+            Ok(serded) => serde_json::from_str(&serded).unwrap_or_default(),
+            Err(_) => Self::default(),
+        })
     }
 
     /// Read the config file without reading the api_key.

@@ -13,6 +13,8 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 ## [0.0.1-alpha6] - 2024-05-30
 
 - multi-line input support
+- fix: keyring error if no entry in credencial manager
+- say bye when quit
 
 ## [0.0.1-alpha5] - 2024-05-26
 

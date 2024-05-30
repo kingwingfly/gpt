@@ -31,10 +31,15 @@ pub(crate) async fn new_chat(mut chat: Chat) -> Result<()> {
     println!("{}", chat);
     let mut stdout = std::io::stdout();
     loop {
-        let content = input("You:", "");
+        let content = input(
+            "You:",
+            "",
+            #[cfg(feature = "cliclack")]
+            true,
+        );
         match content {
             Ok(content) => {
-                if !content.is_empty() {
+                if !content.trim().is_empty() {
                     chat.add_message(Role::User, content)
                 } else {
                     if confirm("Quit?")? {
@@ -73,6 +78,8 @@ pub(crate) async fn new_chat(mut chat: Chat) -> Result<()> {
         let path = chat.save_to_dir(gpt_core::config::data_dir()?)?;
         println!("Chat saved: {}", path.to_string_lossy());
     }
+    #[cfg(feature = "cliclack")]
+    cliclack::outro("Bye!")?;
     Ok(())
 }
 
@@ -107,7 +114,11 @@ pub(crate) async fn history() -> Result<()> {
                     println!("All chats deleted.");
                 }
             }
-            Ok(2) | Err(_) => break,
+            Ok(2) | Err(_) => {
+                #[cfg(feature = "cliclack")]
+                cliclack::outro("Bye!")?;
+                break;
+            }
             Ok(chosen) => {
                 let idx = chosen - 3;
                 let path = data_dir.join(&paths[idx]);
@@ -133,5 +144,6 @@ pub(crate) async fn history() -> Result<()> {
         }
         println!()
     }
+
     Ok(())
 }

@@ -1,7 +1,4 @@
-#[cfg(all(feature = "dialoguer", feature = "cliclack"))]
-compile_error!("Only one of the features `dialoguer` and `cliclack` can be enabled at a time.");
-#[cfg(not(any(feature = "dialoguer", feature = "cliclack")))]
-compile_error!("At least one of the features `dialoguer` and `cliclack` must be enabled.");
+#![cfg_attr(docsrs, feature(doc_auto_cfg))]
 
 #[cfg(feature = "cli")]
 mod cli;

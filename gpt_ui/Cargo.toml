@@ -8,6 +8,10 @@ edition.workspace = true
 repository.workspace = true
 documentation = "https://docs.rs/gpt_core"
 
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
 [dependencies]
 gpt_core = { path = "../gpt_core" }
 # error

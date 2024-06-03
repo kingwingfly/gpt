@@ -472,12 +472,11 @@ checksum = "98cc8fbded0c607b7ba9dd60cd98df59af97e84d24e49c8557331cfc26d301ce"
 [[package]]
 name = "cliclack"
 version = "0.2.5"
-source = "git+https://github.com/kingwingfly/cliclack.git?branch=feature/multiline#b9270db021e4519e2d5e9c3eb61b57eee03bf90b"
+source = "git+https://github.com/kingwingfly/cliclack.git?branch=feature/multiline#69fec3378350e35fdde7c5d30e2ca22bb99e85a2"
 dependencies = [
  "console",
  "indicatif",
  "once_cell",
- "rustc_version",
  "strsim",
  "textwrap",
  "zeroize",

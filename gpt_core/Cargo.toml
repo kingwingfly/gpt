@@ -2,7 +2,7 @@
 name = "gpt_core"
 version.workspace = true
 authors.workspace = true
-description = "chatGPT UI's core crate. Offer the basic functionalities for chatGPT UI."
+description = "chatGPT UI's core crate. Offer the basic functionalities and mock server for chatGPT UI."
 license.workspace = true
 edition.workspace = true
 repository.workspace = true

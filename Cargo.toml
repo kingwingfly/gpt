@@ -3,12 +3,12 @@ members = ["gpt", "gpt_core", "gpt_ui"]
 resolver = "2"
 
 [workspace.package]
-version = "0.0.1-alpha6"
+version = "0.0.1-alpha7"
 authors = ["Louis <836250617@qq.com>"]
 description = "Call chatGPT with CLI."
 license = "MIT"
 edition = "2021"
-repository = "https://github.com/kingwingfly/gpt_cli"
+repository = "https://github.com/kingwingfly/gpt"
 documentation = "https://docs.rs/gpt_core"
 
 [workspace.dependencies]

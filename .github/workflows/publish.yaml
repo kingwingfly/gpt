@@ -7,6 +7,10 @@ on:
         description: "publish gpt_core"
         type: boolean
         default: false
+      gpt_ui:
+        description: "publish gpt_ui"
+        type: boolean
+        default: false
 
 env:
   CARGO_TERM_COLOR: always
@@ -23,6 +27,10 @@ jobs:
       - name: login to crates.io
         run: cargo login ${{ secrets.CRATESIO }}
 
-      - name: publish fav_derive
+      - name: publish gpt_core
         if: ${{ inputs.gpt_core }}
         run: .github/scripts/publish_test.sh gpt_core && .github/scripts/publish.sh gpt_core
+
+      - name: publish gpt_ui
+        if: ${{ inputs gpt_ui }}
+        run: .github/scripts/publish_test.sh gpt_ui && .github/scripts/publish.sh gpt_ui

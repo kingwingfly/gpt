@@ -29,17 +29,17 @@ fn display() -> Result<()> {
 fn modify() -> Result<()> {
     let mut config = Config::read()?;
     match input(
-        " Endpoint? [Empty to unchange]\n",
+        "Endpoint? [Empty to unchange]\n",
         config.endpoint(),
         #[cfg(feature = "cliclack")]
         false,
     ) {
         Ok(content) if !content.is_empty() => config.set_endpoint(content),
-        _ => {}
+        _ => return Ok(()),
     }
     match password("API Key? [Empty to unchange]\n") {
         Ok(content) if !content.is_empty() => config.set_api_key(content),
-        _ => {}
+        _ => return Ok(()),
     }
     config.save()?;
     display()

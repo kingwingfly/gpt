@@ -35,11 +35,13 @@ fn modify() -> Result<()> {
         false,
     ) {
         Ok(content) if !content.is_empty() => config.set_endpoint(content),
-        _ => return Ok(()),
+        Err(_) => return Ok(()),
+        _ => {}
     }
     match password("API Key? [Empty to unchange]\n") {
         Ok(content) if !content.is_empty() => config.set_api_key(content),
-        _ => return Ok(()),
+        Err(_) => return Ok(()),
+        _ => {}
     }
     config.save()?;
     display()

@@ -32,5 +32,5 @@ jobs:
         run: .github/scripts/publish_test.sh gpt_core && .github/scripts/publish.sh gpt_core
 
       - name: publish gpt_ui
-        if: ${{ inputs gpt_ui }}
+        if: ${{ inputs.gpt_ui }}
         run: .github/scripts/publish_test.sh gpt_ui && .github/scripts/publish.sh gpt_ui

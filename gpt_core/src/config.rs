@@ -69,7 +69,7 @@ impl Config {
     /// If no Config saved, it will return default Config.
     pub fn read_masked() -> Result<Self> {
         let mut res = Self::read()?;
-        res.set_api_key(masked());
+        mask(&mut res.api_key);
         Ok(res)
     }
 
@@ -111,8 +111,13 @@ fn keyring_entry() -> &'static Entry {
     ENTRY.get_or_init(|| Entry::new(NAME, &user).expect(KEYRING_ERROR_HINT))
 }
 
-fn masked() -> String {
-    "********".to_string()
+fn mask(s: &mut str) {
+    let n = std::cmp::min(5, s.len() / 8 + 1);
+    let (_, r) = s.split_at_mut(n);
+    unsafe {
+        let r = r.as_bytes_mut();
+        r.fill(b'*');
+    }
 }
 
 #[cfg(test)]

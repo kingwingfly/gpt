@@ -21,12 +21,13 @@ pub(super) fn input(
         .allow_empty(true)
         .interact()?;
     #[cfg(feature = "cliclack")]
-    let input = cliclack::Input::new(prompt.as_ref())
+    let mut input = cliclack::Input::new(prompt.as_ref())
         .placeholder(placeholder.as_ref())
-        .multiline(multiline)
-        .required(false)
-        .interact()?;
-    Ok(input)
+        .required(false);
+    if multiline {
+        input = input.multiline()
+    }
+    Ok(input.interact::<String>()?)
 }
 
 pub(super) fn password(prompt: impl AsRef<str>) -> Result<String> {

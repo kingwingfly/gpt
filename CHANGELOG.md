@@ -13,6 +13,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 ## [0.0.1-alpha8] - 2024-06-06
 
 - cli: fix config bad behavior
+- bump deps
 
 ## [0.0.1-alpha7] - 2024-06-06
 

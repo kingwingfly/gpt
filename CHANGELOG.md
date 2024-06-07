@@ -14,6 +14,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 - cli: fix config bad behavior
 - bump deps
+- fix: placeholder color wrong
 
 ## [0.0.1-alpha7] - 2024-06-06
 

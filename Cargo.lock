@@ -474,7 +474,7 @@ checksum = "4b82cf0babdbd58558212896d1a4272303a57bdb245c2bf1147185fb45640e70"
 [[package]]
 name = "cliclack"
 version = "0.2.5"
-source = "git+https://github.com/kingwingfly/cliclack.git?branch=feature/multiline#e7e215156ec0a2c74ac46d886b8bdeb9ec95b185"
+source = "git+https://github.com/kingwingfly/cliclack.git?branch=feature/multiline#6587bff85795bd31ea51bc3b04385631a5c28abb"
 dependencies = [
  "console",
  "indicatif",

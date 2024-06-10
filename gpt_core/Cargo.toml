@@ -25,7 +25,7 @@ keyring = { version = "2.3.3" }
 sanitize-filename = "0.5.0"
 # net
 reqwest = { version = "0.12.4", features = ["json", "stream"] }
-url = { version = "2.5.0", features = ["serde"] }
+url = { version = "2.5.1", features = ["serde"] }
 # async
 futures-util = "0.3.30"
 

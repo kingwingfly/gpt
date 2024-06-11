@@ -10,6 +10,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 ## [Unreleased]
 
+## [0.0.1-alpha11] - 2024-06-11
+
+- support end and home navigation
+
 ## [0.0.1-alpha10] - 2024-06-11
 
 - upstream: bump deps

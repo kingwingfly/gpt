@@ -10,6 +10,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 ## [Unreleased]
 
+## [0.0.1] - 2024-08-06
+
+- release formal version
+
 ## [0.0.1-alpha12] - 2024-06-13
 
 - upstream multiline support merged

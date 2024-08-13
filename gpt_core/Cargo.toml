@@ -47,7 +47,7 @@ keyring = { version = "3.0.5", features = ["linux-native"] }
 keyring = { version = "3.0.5", features = ["windows-native"] }
 
 [dev-dependencies]
-tokio = { version = "1.38", features = ["macros"] }
+tokio = { version = "1.39", features = ["macros"] }
 
 [build-dependencies]
 rustc_version = "0.4.0"

@@ -9,6 +9,9 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 -->
 
 ## [Unreleased]
+## [0.0.2] - 2024-08-14
+
+- bump deps: keyring 3.0.x
 
 ## [0.0.1] - 2024-08-06
 

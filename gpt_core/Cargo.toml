@@ -23,7 +23,7 @@ uuid = { version = "1.10.0", features = ["v7", "serde"] }
 dirs = "5.0.1"
 sanitize-filename = "0.5.0"
 # net
-reqwest = { version = "0.12.5", features = ["json", "stream"] }
+reqwest = { version = "0.12.7", features = ["json", "stream"] }
 url = { version = "2.5.2", features = ["serde"] }
 # async
 futures-util = "0.3.30"

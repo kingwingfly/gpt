@@ -29,10 +29,10 @@ url = { version = "2.5.2", features = ["serde"] }
 futures-util = "0.3.30"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-keyring = { version = "3.0.5", features = ["apple-native"] }
+keyring = { version = "3.2.0", features = ["apple-native"] }
 
 [target.'cfg(target_os = "ios")'.dependencies]
-keyring = { version = "3.0.5", features = ["apple-native"] }
+keyring = { version = "3.2.0", features = ["apple-native"] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 keyring = { version = "3.0.5", features = ["linux-native"] }

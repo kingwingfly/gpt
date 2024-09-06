@@ -27,7 +27,6 @@ tokio = { version = "1", features = ["macros", "signal"] }
 # tools
 const_format = "0.2"
 ctrlc = { version = "3.4.4" }
-encrypt_config = { workspace = true }
 
 [build-dependencies]
 vergen = { version = "8.3", features = ["git", "rustc", "gitcl"] }

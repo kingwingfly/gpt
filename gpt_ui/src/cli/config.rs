@@ -1,6 +1,5 @@
 use super::dialog::{input, password, select};
 use super::error::Result;
-use encrypt_config::PersistSource;
 use gpt_core::config::Config;
 
 pub(crate) fn config() -> Result<()> {

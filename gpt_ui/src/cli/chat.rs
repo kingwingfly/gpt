@@ -2,8 +2,6 @@ use super::{
     dialog::{confirm, input, select},
     error::Result,
 };
-#[cfg(not(feature = "mock"))]
-use encrypt_config::PersistSource;
 use gpt_core::{chat::Chat, config::Config, msg::Role};
 
 pub(crate) async fn chat() -> Result<()> {

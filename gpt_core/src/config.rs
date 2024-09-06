@@ -7,6 +7,9 @@ use url::Url;
 /// The name of the application for config save.
 const NAME: &str = "chatGPT";
 
+/// The configuration for the OpenAI chatGPT API,
+/// which imlpements the `PersistSource` trait.
+/// `load` and `store` is provided.
 #[derive(Debug, Serialize, Deserialize, PersistSource)]
 #[source(name = "gpt_cli/api_key.json")]
 pub struct Config {
@@ -35,16 +38,20 @@ impl Default for Config {
     }
 }
 
-/// When enable feature `mock`, it uses a mock keyring entry.
-/// When not, it uses os' keyring entry.
-/// This avoids entering password during tests.
-/// If no password manager keyring is able to use, program will panic with error hint.
 impl Config {
     pub fn new(endpoint: impl AsRef<str>, api_key: impl AsRef<str>) -> Self {
         Self {
             endpoint: Url::parse(endpoint.as_ref()).unwrap(),
             api_key: api_key.as_ref().to_owned(),
         }
+    }
+
+    pub fn load() -> std::io::Result<Self> {
+        <Self as PersistSource>::load()
+    }
+
+    pub fn store(&self) -> std::io::Result<()> {
+        <Self as PersistSource>::store(self)
     }
 }
 

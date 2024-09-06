@@ -1,8 +1,7 @@
 //! Tools for interacting with the OpenAI chatGPT API.
-//! The config includes the endpoint and api_key, which can be saved to the keyring.
+//! The config includes the endpoint and api_key, which can be easily saved.
 //! Usage example is [here](https://github.com/kingwingfly/gpt).
 //! Having an openAI mock server, stream the chat.
-//! The keyring will also work on mock mode. (Needs `mock` feature enabled)
 
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 

@@ -19,7 +19,7 @@ impl Display for Config {
         write!(
             f,
             "Use Config:\t{}\nEndpoint:\t{}\nAPI Key:\t{}",
-            Config::path().to_string_lossy().to_string(),
+            Config::path().to_string_lossy(),
             self.endpoint,
             self.api_key
         )

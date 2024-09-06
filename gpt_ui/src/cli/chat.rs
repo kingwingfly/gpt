@@ -2,6 +2,8 @@ use super::{
     dialog::{confirm, input, select},
     error::Result,
 };
+#[cfg(not(feature = "mock"))]
+use encrypt_config::PersistSource;
 use gpt_core::{chat::Chat, config::Config, msg::Role};
 
 pub(crate) async fn chat() -> Result<()> {
@@ -25,9 +27,12 @@ pub(crate) async fn chat() -> Result<()> {
 
 pub(crate) async fn new_chat(mut chat: Chat) -> Result<()> {
     #[cfg(not(feature = "mock"))]
-    let config = Config::read()?;
+    let config = Config::load().unwrap_or_default();
     #[cfg(feature = "mock")]
-    let config = Config::new(crate::MOCK_SERVER, "");
+    let config = Config {
+        endpoint: crate::MOCK_SERVER.parse().unwrap(),
+        api_key: "".to_string(),
+    };
     println!("{}", chat);
     let mut stdout = std::io::stdout();
     loop {

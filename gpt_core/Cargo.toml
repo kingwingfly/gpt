@@ -25,26 +25,9 @@ sanitize-filename = "0.5.0"
 # net
 reqwest = { version = "0.12.7", features = ["json", "stream"] }
 url = { version = "2.5.2", features = ["serde"] }
+encrypt_config = { workspace = true }
 # async
 futures-util = "0.3.30"
-
-[target.'cfg(target_os = "macos")'.dependencies]
-keyring = { version = "3.2.1", features = ["apple-native"] }
-
-[target.'cfg(target_os = "ios")'.dependencies]
-keyring = { version = "3.2.1", features = ["apple-native"] }
-
-[target.'cfg(target_os = "linux")'.dependencies]
-keyring = { version = "3.2.1", features = ["linux-native"] }
-
-[target.'cfg(target_os = "freebsd")'.dependencies]
-keyring = { version = "3.2.1", features = ["linux-native"] }
-
-[target.'cfg(target_os = "openbsd")'.dependencies]
-keyring = { version = "3.2.1", features = ["linux-native"] }
-
-[target.'cfg(target_os = "windows")'.dependencies]
-keyring = { version = "3.0.5", features = ["windows-native"] }
 
 [dev-dependencies]
 tokio = { version = "1.40", features = ["macros"] }

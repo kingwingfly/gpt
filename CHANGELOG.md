@@ -8,7 +8,13 @@ This project adheres to [Semantic Versioning](https://semver.org).
 Note: In this file, do not use the hard wrap in the middle of a sentence for compatibility with GitHub comment style markdown rendering.
 -->
 
+
 ## [Unreleased]
+## [0.0.3] - 2024-09-06
+
+- use `encrypt_config` instead of keyring
+- the api_key will no longer be encrypt, because it's meaningless in OS.
+
 ## [0.0.2] - 2024-08-14
 
 - bump deps: keyring 3.0.x

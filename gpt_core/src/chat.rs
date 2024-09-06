@@ -121,11 +121,8 @@ impl Chat {
     pub async fn ask(&self, config: &Config, output: &mut impl io::Write) -> Result<String> {
         let mut content = String::new();
         let mut stream = Self::client()
-            .post(config.endpoint().clone())
-            .header(
-                header::AUTHORIZATION,
-                format!("Bearer {}", config.api_key()),
-            )
+            .post(config.endpoint.clone())
+            .header(header::AUTHORIZATION, format!("Bearer {}", config.api_key))
             .json(&self.req())
             .send()
             .await?

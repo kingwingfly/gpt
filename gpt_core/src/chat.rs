@@ -151,7 +151,7 @@ impl Chat {
                             }
                         }
                         Err(_) => {
-                            buffer = chunk.to_string();
+                            buffer = format!("data: {chunk}");
                             continue 'a;
                         }
                     }

@@ -10,7 +10,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 
 ## [Unreleased]
-## [0.0.5] - 2024-09-06
+## [0.0.5] - 2024-10-18
 
 - enhance: support model choice
 - fix: panic if response is not completed

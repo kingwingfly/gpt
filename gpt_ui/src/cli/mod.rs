@@ -23,6 +23,8 @@ enum Commands {
     New,
     /// History of chat with the OpenAI chatGPT API.
     History,
+    /// Change model
+    ChooseModel,
     /// Configure the CLI.
     Config,
 }
@@ -35,6 +37,7 @@ impl Cli {
             Some(subcmd) => match subcmd {
                 Commands::New => chat::new_chat(Chat::new()).await,
                 Commands::History => chat::history().await,
+                Commands::ChooseModel => config::choose_model(),
                 Commands::Config => config::config(),
             },
             None => chat::chat().await,

@@ -1,6 +1,6 @@
 use super::dialog::{input, password, select};
 use super::error::Result;
-use gpt_core::config::Config;
+use gpt_core::{config::Config, model::ModelVersion};
 
 pub(crate) fn config() -> Result<()> {
     #[cfg(all(feature = "dialoguer", not(feature = "cliclack")))]
@@ -12,6 +12,31 @@ pub(crate) fn config() -> Result<()> {
         Ok(1) => modify(),
         _ => Ok(()),
     }
+}
+
+pub(crate) fn choose_model() -> Result<()> {
+    let mut config = Config::load().unwrap_or_default();
+    #[cfg(all(feature = "dialoguer", not(feature = "cliclack")))]
+    let items = &[
+        ModelVersion::GPT4o,
+        ModelVersion::GPT4Turbo,
+        ModelVersion::Llama405B,
+        ModelVersion::Llama70B,
+        ModelVersion::Llama8B,
+    ];
+    #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
+    let items = &[
+        (0, ModelVersion::GPT4o, ""),
+        (1, ModelVersion::GPT4Turbo, ""),
+        (2, ModelVersion::Llama405B, ""),
+        (3, ModelVersion::Llama70B, ""),
+        (4, ModelVersion::Llama8B, ""),
+    ];
+    if let Ok(i) = select("Choose default model:", items) {
+        config.model = items[i].1;
+        config.store()?;
+    }
+    Ok(())
 }
 
 /// Display the current configuration.

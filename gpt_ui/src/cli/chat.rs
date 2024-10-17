@@ -7,7 +7,7 @@ use gpt_core::{chat::Chat, config::Config, msg::Role};
 pub(crate) async fn chat() -> Result<()> {
     #[cfg(feature = "mock")]
     let mock = gpt_core::mock::Mock::new(3000, std::time::Duration::from_secs(60));
-    let items = ["New", "History", "Config", "Quit"];
+    let items = ["New", "History", "ChooseModel", "Config", "Quit"];
     #[cfg(all(feature = "cliclack", not(feature = "dialoguer")))]
     let items = (0..items.len())
         .map(|i| (i, items[i], ""))
@@ -15,7 +15,8 @@ pub(crate) async fn chat() -> Result<()> {
     match select("Let's chat!", &items) {
         Ok(0) => new_chat(Chat::new()).await?,
         Ok(1) => history().await?,
-        Ok(2) => super::config::config()?,
+        Ok(2) => super::config::choose_model()?,
+        Ok(3) => super::config::config()?,
         _ => {}
     }
     #[cfg(feature = "mock")]
@@ -30,7 +31,9 @@ pub(crate) async fn new_chat(mut chat: Chat) -> Result<()> {
     let config = Config {
         endpoint: crate::MOCK_SERVER.parse().unwrap(),
         api_key: "".to_string(),
+        model: gpt_core::model::ModelVersion::GPT4o,
     };
+    chat.set_model(config.model);
     println!("{}", chat);
     let mut stdout = std::io::stdout();
     loop {

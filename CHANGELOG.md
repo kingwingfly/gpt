@@ -10,6 +10,11 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 
 ## [Unreleased]
+## [0.0.5] - 2024-09-06
+
+- enhance: support model choice
+- fix: panic if response is not completed
+
 ## [0.0.4] - 2024-09-06
 
 - transfer store and load from PersistSource to Config

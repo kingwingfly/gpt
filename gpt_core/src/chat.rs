@@ -9,7 +9,12 @@ use crate::{
 use futures_util::StreamExt;
 use reqwest::{header, Client};
 use serde::{Deserialize, Serialize};
-use std::{fmt::Display, io, path::Path, path::PathBuf, sync::OnceLock};
+use std::{
+    fmt::Display,
+    io,
+    path::{Path, PathBuf},
+    sync::OnceLock,
+};
 use uuid::Uuid;
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -127,18 +132,28 @@ impl Chat {
             .send()
             .await?
             .bytes_stream();
+        let mut buffer = String::new();
         while let Some(item) = stream.next().await {
             let item = item?;
             let chunk = std::str::from_utf8(&item).expect("Invalid UTF-8 sequence");
-            for chunk in chunk.split("\n\n") {
+            buffer.push_str(chunk);
+            for chunk in buffer.split("\n\n") {
                 if let Some(chunk) = chunk.strip_prefix("data: ") {
                     if chunk == "[DONE]" {
                         break;
                     }
-                    if let Some(chunk) = serde_json::from_str::<Chunk>(chunk)?.content() {
-                        content.push_str(&chunk);
-                        output.write_all(chunk.as_bytes())?;
-                        output.flush()?;
+                    match serde_json::from_str::<Chunk>(chunk) {
+                        Ok(chunk) => {
+                            if let Some(chunk) = chunk.content() {
+                                content.push_str(&chunk);
+                                output.write_all(chunk.as_bytes())?;
+                                output.flush()?;
+                            }
+                        }
+                        Err(_) => {
+                            buffer = chunk.to_string();
+                            break;
+                        }
                     }
                 }
             }
@@ -189,7 +204,7 @@ mod tests {
         use std::time::Duration;
 
         let chat = Chat::new();
-        let config = Config::new("http://127.0.0.1:3000", "api-key");
+        let config = Config::new("http://127.0.0.1:3000", "api-key", ModelVersion::GPT4o);
         let mock = Mock::new(3000, Duration::from_secs(1));
         let mut output = vec![];
         let content = chat.ask(&config, &mut output).await.unwrap();

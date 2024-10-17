@@ -133,7 +133,7 @@ impl Chat {
             .await?
             .bytes_stream();
         let mut buffer = String::new();
-        while let Some(item) = stream.next().await {
+        'a: while let Some(item) = stream.next().await {
             let item = item?;
             let chunk = std::str::from_utf8(&item).expect("Invalid UTF-8 sequence");
             buffer.push_str(chunk);
@@ -152,11 +152,12 @@ impl Chat {
                         }
                         Err(_) => {
                             buffer = chunk.to_string();
-                            break;
+                            continue 'a;
                         }
                     }
                 }
             }
+            buffer.clear();
         }
         output.write_all(b"\n")?;
         Ok(content)

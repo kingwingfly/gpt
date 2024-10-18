@@ -3,7 +3,7 @@ members = ["gpt", "gpt_core", "gpt_ui"]
 resolver = "2"
 
 [workspace.package]
-version = "0.0.5"
+version = "0.0.6"
 authors = ["Louis <836250617@qq.com>"]
 description = "Call chatGPT with CLI."
 license = "MIT"

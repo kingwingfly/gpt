@@ -132,12 +132,14 @@ impl Chat {
             .send()
             .await?
             .bytes_stream();
-        let mut buffer = String::new();
+        let mut buffer = Vec::new();
         'a: while let Some(item) = stream.next().await {
             let item = item?;
-            let chunk = std::str::from_utf8(&item).expect("Invalid UTF-8 sequence");
-            buffer.push_str(chunk);
-            for chunk in buffer.split("\n\n") {
+            buffer.extend_from_slice(&item);
+            let Ok(chunk) = std::str::from_utf8(&buffer) else {
+                continue;
+            };
+            for chunk in chunk.split("\n\n") {
                 if let Some(chunk) = chunk.strip_prefix("data: ") {
                     if chunk == "[DONE]" {
                         break;
@@ -151,7 +153,7 @@ impl Chat {
                             }
                         }
                         Err(_) => {
-                            buffer = format!("data: {chunk}");
+                            buffer = format!("data: {chunk}").into();
                             continue 'a;
                         }
                     }

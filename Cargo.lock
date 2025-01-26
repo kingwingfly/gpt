@@ -575,7 +575,7 @@ checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"
 
 [[package]]
 name = "gpt"
-version = "0.0.7"
+version = "0.1.0"
 dependencies = [
  "gpt_core",
  "gpt_ui",
@@ -584,7 +584,7 @@ dependencies = [
 
 [[package]]
 name = "gpt_core"
-version = "0.0.7"
+version = "0.1.0"
 dependencies = [
  "dirs",
  "encrypt_config",
@@ -602,7 +602,7 @@ dependencies = [
 
 [[package]]
 name = "gpt_ui"
-version = "0.0.7"
+version = "0.1.0"
 dependencies = [
  "clap",
  "cliclack",

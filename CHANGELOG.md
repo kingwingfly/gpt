@@ -10,7 +10,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 
 ## [Unreleased]
-## [0.0.7] - 2025-01-26
+## [0.1.0] - 2025-01-26
 
 - remove `dialoguer` and use `cliclack` for prompt
 - support DeepSeek (https://api.deepseek.com)

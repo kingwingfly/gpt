@@ -186,7 +186,7 @@ mod tests {
         chat.add_message(Role::User, "How to implemente a http server?".to_string());
         let path = chat.save_to_dir(OUT_DIR).unwrap();
         let chat = Chat::read_from_path(&path).unwrap();
-        assert_eq!(chat.model, ModelVersion::GPT4o);
+        assert_eq!(chat.model, ModelVersion::DeepSeekChat);
         assert_eq!(chat.messages.len(), 2);
         std::fs::remove_file(path).unwrap();
     }

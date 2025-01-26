@@ -22,16 +22,17 @@ pub(super) fn input(
 pub(super) fn password(prompt: impl AsRef<str>) -> Result<String> {
     let pwd = cliclack::Password::new(prompt.as_ref())
         .mask('*')
+        .allow_empty()
         .interact()?;
     Ok(pwd)
 }
 
 pub(super) fn select(
     prompt: impl AsRef<str>,
-    cliclack_itemss: &[(usize, impl Display, impl Display)],
+    cliclack_items: &[(usize, impl Display, impl Display)],
 ) -> Result<usize> {
     let chosen = cliclack::Select::new(prompt.as_ref())
-        .items(cliclack_itemss)
+        .items(cliclack_items)
         .interact()?;
     Ok(chosen)
 }

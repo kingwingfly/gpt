@@ -2,7 +2,7 @@ use super::{
     dialog::{confirm, input, select},
     error::Result,
 };
-use gpt_core::{chat::Chat, config::Configs, msg::Role};
+use gpt_core::{chat::Chat, msg::Role};
 
 pub(crate) async fn chat() -> Result<()> {
     #[cfg(feature = "mock")]
@@ -25,7 +25,10 @@ pub(crate) async fn chat() -> Result<()> {
 
 pub(crate) async fn new_chat(mut chat: Chat) -> Result<()> {
     #[cfg(not(feature = "mock"))]
-    let config = Configs::load().unwrap_or_default().current().clone();
+    let config = gpt_core::config::Configs::load()
+        .unwrap_or_default()
+        .current()
+        .clone();
     #[cfg(feature = "mock")]
     let config = gpt_core::config::Config {
         endpoint: crate::MOCK_SERVER.parse().unwrap(),

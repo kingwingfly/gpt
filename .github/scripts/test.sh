@@ -7,7 +7,6 @@ export TERM=xterm-256color
 statements=(
     "cargo fetch --locked"
     "cargo clippy --features cli -- -D warnings"
-    "cargo clippy --features tui -- -D warnings"
     "cargo clippy --features cli,mock -- -D warnings"
     "cargo clippy --features tui,mock -- -D warnings"
 

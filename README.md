@@ -68,6 +68,8 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://github.com/kingwingfly/gpt)
 
+Support openAI chatGPT, llama and DeepSeek.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -86,8 +88,34 @@
 
 Download in [release page](https://github.com/kingwingfly/gpt/releases) or compile it yourself.
 
+For api invoke endpoint:
+
+- openAI: https://api.openai.com/v1/chat/completions
+- github developer: https://models.inference.ai.azure.com/chat/completions
+- DeepSeek: https://api.deepseek.com/chat/completions
+
+others help youself.
+
 For windows users, there's bug upstream when handling ctrl-c, you can quit by press `ESC`.
 
+<!-- USAGE EXAMPLES -->
+## Usage
+
+```sh
+# start chatting
+gpt_cli
+# config
+gpt_cli config
+# quit
+ESC
+```
+
+_For more examples, please refer to the [Documentation](https://docs.rs/gpt_core)_
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Compile it yourself
 ### Prerequisites
 
 * Install Rust
@@ -107,25 +135,6 @@ For windows users, there's bug upstream when handling ctrl-c, you can quit by pr
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-```sh
-# start chatting
-gpt_cli
-# config
-gpt_cli config
-# quit
-ESC
-```
-
-_For more examples, please refer to the [Documentation](https://docs.rs/gpt_core)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ROADMAP -->

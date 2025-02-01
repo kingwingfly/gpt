@@ -19,8 +19,8 @@ serde_json = { workspace = true }
 # error
 snafu = { workspace = true }
 # tool
-uuid = { version = "1.10.0", features = ["v7", "serde"] }
-dirs = "5.0.1"
+uuid = { version = "1.12.1", features = ["v7", "serde"] }
+dirs = "6.0.0"
 sanitize-filename = "0.6.0"
 # net
 reqwest = { version = "0.12.12", features = ["json", "stream"] }
@@ -30,7 +30,7 @@ encrypt_config = { workspace = true }
 futures-util = "0.3.30"
 
 [dev-dependencies]
-tokio = { version = "1.42", features = ["macros"] }
+tokio = { version = "1.43", features = ["macros"] }
 
 [build-dependencies]
 rustc_version = "0.4.1"

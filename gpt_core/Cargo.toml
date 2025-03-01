@@ -19,7 +19,7 @@ serde_json = { workspace = true }
 # error
 snafu = { workspace = true }
 # tool
-uuid = { version = "1.12.1", features = ["v7", "serde"] }
+uuid = { version = "1.15.1", features = ["v7", "serde"] }
 dirs = "6.0.0"
 sanitize-filename = "0.6.0"
 # net

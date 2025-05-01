@@ -17,15 +17,15 @@ gpt_core = { path = "../gpt_core" }
 # error
 snafu = { workspace = true }
 # ui
-crossterm = { version = "0.28.1", optional = true }
+crossterm = { version = "0.29.0", optional = true }
 ratatui = { version = "0.29.0", optional = true }
-clap = { version = "4.5.27", optional = true, features = ["derive"] }
+clap = { version = "4.5.37", optional = true, features = ["derive"] }
 cliclack = { version = "0.3", optional = true }
 # async
 tokio = { version = "1", features = ["macros", "signal"] }
 # tools
 const_format = "0.2"
-ctrlc = { version = "3.4.4" }
+ctrlc = { version = "3.4.6" }
 
 [build-dependencies]
 vergen = { version = "8.3", features = ["git", "rustc", "gitcl"] }
